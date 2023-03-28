@@ -1,9 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/project.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:intl/intl.dart';
 
 class ProjectDetailPage extends StatelessWidget {
   const ProjectDetailPage({Key? key}) : super(key: key);
+
+
+  Widget buildDate(Project project){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(
+          Icons.calendar_today,
+          color: Colors.grey,
+          size: 12,
+        ),
+        SizedBox(width: 4),
+        Text(
+          'Start: ${DateFormat('yyyy. MM. dd').format(project.startDate)}',
+          style: TextStyle(
+            fontSize: 10,
+            color: Colors.grey,
+          ),
+        ),
+        SizedBox(width: 16),
+        Icon(
+          Icons.calendar_today,
+          color: Colors.grey,
+          size: 12,
+        ),
+        SizedBox(width: 4),
+        Text(
+          'End: ${DateFormat('yyyy. MM. dd').format(project.endDate)}',
+          style: TextStyle(
+            fontSize: 10,
+            color: Colors.grey,
+          ),
+          overflow: TextOverflow.fade,
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,38 +86,21 @@ class ProjectDetailPage extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              children: [
-                Text(
-                  'Start Date: ',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                Text(
-                  '${project.startDate.year}-${project.startDate.month}-${project.startDate.day}',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-              ],
+            SizedBox(height: 10),
+            Text(
+              project.name,
+              style: Theme.of(context).textTheme.headline5,
             ),
-            Row(
-              children: [
-                Text(
-                  'End Date:  ',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                Text(
-                  '${project.endDate.year}-${project.endDate.month}-${project.endDate.day}',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
+            SizedBox(height: 10),
+            buildDate(project),
+            SizedBox(height: 10),
             Expanded(
               child: SingleChildScrollView(
                 child: Text(
                   project.description,
                   style: TextStyle(
                     fontSize: 17,
-                  )
+                  ),
                 ),
               ),
             ),

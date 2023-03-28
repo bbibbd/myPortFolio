@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'profiel_widget.dart';
 import 'project.dart';
+import 'package:intl/intl.dart';
 
 class ProjectListPage extends StatefulWidget {
   const ProjectListPage({Key? key}) : super(key: key);
@@ -14,6 +14,25 @@ class ProjectListPage extends StatefulWidget {
 
 class _ProjectListPageState extends State<ProjectListPage> {
   bool _isLandScape = false;
+  String _sortCriteria = '중요도'; // 초기값으로 중요도를 기준으로 정렬
+
+  Widget buildSortDropdown() {
+    return DropdownButton<String>(
+      value: _sortCriteria,
+      onChanged: (String? value) {
+        setState(() {
+          _sortCriteria = value!;
+        });
+      },
+      items: <String>['중요도', '시작일']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
 
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -75,9 +94,9 @@ class _ProjectListPageState extends State<ProjectListPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(''),
-                  Text('Address: '),
-                  Text('Phone: 555-555-5555'),
-                  Text('Email: youremail@example.com'),
+                  Text('Address: 장량로114번길 23-8'),
+                  Text('Phone: +82 10-6501-6514'),
+                  Text('Email: gibeom@handong.ac.kr'),
                 ],
               ),
             ),
@@ -87,11 +106,49 @@ class _ProjectListPageState extends State<ProjectListPage> {
     );
   }
 
+  Widget buildDate(Project project) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(
+          Icons.calendar_today,
+          color: Colors.grey,
+          size: 12,
+        ),
+        SizedBox(width: 4),
+        Text(
+          'Start: ${DateFormat('yyyy. MM. dd').format(project.startDate)}',
+          style: TextStyle(
+            fontSize: 10,
+            color: Colors.grey,
+          ),
+        ),
+        SizedBox(width: 16),
+        Icon(
+          Icons.calendar_today,
+          color: Colors.grey,
+          size: 12,
+        ),
+        SizedBox(width: 4),
+        Text(
+          'End: ${DateFormat('yyyy. MM. dd').format(project.endDate)}',
+          style: TextStyle(
+            fontSize: 10,
+            color: Colors.grey,
+          ),
+          overflow: TextOverflow.fade,
+        ),
+      ],
+    );
+  }
 
   Widget buildGridView(List<Project> projects) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    int crossAxisCount = screenWidth ~/ 300; // 300은 각 열의 최소 너비
+
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+        crossAxisCount: crossAxisCount,
         childAspectRatio: 3 / 4,
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
@@ -101,8 +158,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
         final project = projects[index];
         return InkWell(
           onTap: () {
-            Navigator.pushNamed(context, '/projectDetail',
-                arguments: project);
+            Navigator.pushNamed(context, '/projectDetail', arguments: project);
           },
           child: Card(
             elevation: 2,
@@ -136,6 +192,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      SizedBox(height: 8),
+                      buildDate(project),
                     ],
                   ),
                 ),
@@ -147,7 +205,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
     );
   }
 
-
   Widget buildListView(List<Project> projects) {
     return ListView.builder(
       itemCount: projects.length,
@@ -155,8 +212,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
         final project = projects[index];
         return InkWell(
           onTap: () {
-            Navigator.pushNamed(context, '/projectDetail',
-                arguments: project);
+            Navigator.pushNamed(context, '/projectDetail', arguments: project);
           },
           child: Card(
             elevation: 2,
@@ -189,6 +245,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      SizedBox(height: 8),
+                      buildDate(project),
                     ],
                   ),
                 ),
@@ -200,6 +258,14 @@ class _ProjectListPageState extends State<ProjectListPage> {
     );
   }
 
+  String orderBy(String order){
+    if(order == "시작일"){
+      return "startDate";
+    }
+    else{
+      return order;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -252,15 +318,22 @@ class _ProjectListPageState extends State<ProjectListPage> {
               },
             ),
             SizedBox(height: 16),
-            Text(
-              'Projects',
-              style: Theme.of(context).textTheme.headline6,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Projects',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                buildSortDropdown(),
+              ],
             ),
             SizedBox(height: 16),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('Projects')
+                    .orderBy(orderBy(_sortCriteria), descending: false)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
