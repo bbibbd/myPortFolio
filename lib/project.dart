@@ -5,6 +5,7 @@ class Project {
   final DateTime startDate;
   final DateTime endDate;
   final List<String> imageUrls;
+  final List<String> skills;
 
   Project({
     required this.name,
@@ -12,6 +13,6 @@ class Project {
     required this.imageUrl,
     required this.startDate,
     required this.endDate,
-    required this.imageUrls,
+    required this.imageUrls, required this.skills,
   });
 }

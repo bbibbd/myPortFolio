@@ -132,6 +132,30 @@ class ProjectDetailPage extends StatelessWidget {
     );
   }
 
+  Widget buildSkills(List<String> skills) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '주요 기술',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          children: skills.map((skill) {
+            return Chip(
+              label: Text(skill),
+              backgroundColor: Colors.grey[300],
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +186,8 @@ class ProjectDetailPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             buildDate(project),
+            SizedBox(height: 10),
+            buildSkills(project.skills),
             SizedBox(height: 10),
             Expanded(
               child: Text(

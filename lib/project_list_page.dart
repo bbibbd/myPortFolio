@@ -357,9 +357,10 @@ class _ProjectListPageState extends State<ProjectListPage> {
                         (data['imageUrls'] as List<dynamic>)
                             .map((url) => url as String)
                             .toList();
-                    // final List<String> skills = (data['imageUrls'] as List<dynamic>)
-                    //     .map((url) => url as String)
-                    //     .toList();
+                    final List<String> skills = (data['주요기술'] as List<dynamic>)
+                        .map((url) => url as String)
+                        .toList();
+
                     return Project(
                       name: data['projectName'] as String,
                       description: data['description'] as String,
@@ -367,6 +368,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                       startDate: (data['startDate'] as Timestamp).toDate(),
                       endDate: (data['endDate'] as Timestamp).toDate(),
                       imageUrls: imageUrls,
+                      skills: skills
                     );
                   }).toList();
 
