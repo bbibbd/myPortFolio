@@ -17,8 +17,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
   String _sortCriteria = '중요도'; // 초기값으로 중요도를 기준으로 정렬
   final Uri _url = Uri.parse('https://github.com/bbibbd');
 
-
-
   Widget buildSortDropdown() {
     return DropdownButton<String>(
       value: _sortCriteria,
@@ -119,33 +117,48 @@ class _ProjectListPageState extends State<ProjectListPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Icon(
-          Icons.calendar_today,
-          color: Colors.grey,
-          size: 12,
-        ),
-        SizedBox(width: 4),
-        Text(
-          'Start: ${DateFormat('yyyy. MM. dd').format(project.startDate)}',
-          style: TextStyle(
-            fontSize: 10,
-            color: Colors.grey,
+        Expanded(
+          child: Row(
+            children: [
+              Icon(
+                Icons.calendar_today,
+                color: Colors.grey,
+                size: 12,
+              ),
+              SizedBox(width: 4),
+              Flexible(
+                child: Text(
+                  'Start: ${DateFormat('yyyy. MM. dd').format(project.startDate)}',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(width: 16),
-        Icon(
-          Icons.calendar_today,
-          color: Colors.grey,
-          size: 12,
-        ),
-        SizedBox(width: 4),
-        Text(
-          'End: ${DateFormat('yyyy. MM. dd').format(project.endDate)}',
-          style: TextStyle(
-            fontSize: 10,
-            color: Colors.grey,
+        Expanded(
+          child: Row(
+            children: [
+              Icon(
+                Icons.calendar_today,
+                color: Colors.grey,
+                size: 12,
+              ),
+              SizedBox(width: 4),
+              Flexible(
+                child: Text(
+                  'End: ${DateFormat('yyyy. MM. dd').format(project.endDate)}',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ],
           ),
-          overflow: TextOverflow.fade,
         ),
       ],
     );
@@ -278,6 +291,31 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
   @override
   Widget build(BuildContext context) {
+    double paddingValue = 12;
+    final double screenWidth = MediaQuery.of(context).size.width;
+
+    if (screenWidth > 320 && screenWidth <= 375) {
+      paddingValue = 12;
+    } else if (screenWidth > 375 && screenWidth <= 414) {
+      paddingValue = 20;
+    } else if (screenWidth > 414 && screenWidth <= 480) {
+      paddingValue = 28;
+    } else if (screenWidth > 480 && screenWidth <= 540) {
+      paddingValue = 36;
+    } else if (screenWidth > 540 && screenWidth <= 600) {
+      paddingValue = 44;
+    } else if (screenWidth > 600 && screenWidth <= 720) {
+      paddingValue = 52;
+    } else if (screenWidth > 720 && screenWidth <= 840) {
+      paddingValue = 60;
+    } else if (screenWidth > 840 && screenWidth <= 960) {
+      paddingValue = 68;
+    } else if (screenWidth > 960 && screenWidth <= 1080) {
+      paddingValue = 76;
+    } else if (screenWidth > 1080) {
+      paddingValue = 84;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('My Portfolio'),
@@ -295,7 +333,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
       ),
       drawer: buildDrawer(context),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.only(left:paddingValue, right: paddingValue, top: 16.0, bottom: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

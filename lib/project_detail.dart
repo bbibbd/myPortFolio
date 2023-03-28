@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'package:portfolio/project.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 
 class ProjectDetailPage extends StatelessWidget {
   const ProjectDetailPage({Key? key}) : super(key: key);
-
-
 
   Widget buildDate(Project project){
     return Row(
@@ -46,91 +44,101 @@ class ProjectDetailPage extends StatelessWidget {
       ],
     );
   }
-
   void _showImage(BuildContext context, List<String> imageUrls, int initialIndex) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => Scaffold(
-          appBar: AppBar(),
-          body: Center(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: Stack(
-                children: [
-                  PageView.builder(
-                    itemCount: imageUrls.length,
-                    itemBuilder: (_, index) {
-                      return PhotoView(
-                        imageProvider: NetworkImage(imageUrls[index]),
-                      );
-                    },
-                    onPageChanged: (index) {},
-                    controller: PageController(initialPage: initialIndex),
-                  ),
-                  Positioned(
-                    top: 40,
-                    right: 16,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white.withOpacity(0.7),
-                        ),
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.black,
-                          size: 28,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  color: Colors.black54,
+                ),
               ),
-            ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.7,
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: PhotoViewGallery.builder(
+                  itemCount: imageUrls.length,
+                  builder: (BuildContext context, int index) {
+                    return PhotoViewGalleryPageOptions(
+                      imageProvider: NetworkImage(imageUrls[index]),
+                      initialScale: PhotoViewComputedScale.contained,
+                      heroAttributes:
+                      PhotoViewHeroAttributes(tag: imageUrls[index]),
+                    );
+                  },
+                  scrollPhysics: const BouncingScrollPhysics(),
+                  backgroundDecoration: BoxDecoration(color: Colors.black54),
+                  pageController: PageController(initialPage: initialIndex),
+                ),
+              ),
+              Positioned(
+                top: 20,
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ],
           ),
+        );
+      },
+    );
+  }
+
+
+
+
+  Widget buildCarouselSlider(
+      BuildContext context, Project project, bool isPortrait, double screenHeight) {
+    return PageStorage(
+      bucket: PageStorageBucket(),
+      child: CarouselSlider(
+        items: project.imageUrls
+            .asMap()
+            .entries
+            .map((entry) => InkWell(
+          onTap: () {
+            _showImage(context, project.imageUrls, entry.key);
+          },
+          child: Image.network(
+            entry.value,
+            fit: BoxFit.cover,
+          ),
+        ))
+            .toList(),
+        options: CarouselOptions(
+          height: isPortrait ? 200 : screenHeight * 0.38,
+          aspectRatio: 16 / 9,
+          viewportFraction: 0.5,
+          initialPage: 0,
+          enableInfiniteScroll: true,
+          reverse: false,
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 3),
+          autoPlayAnimationDuration: Duration(milliseconds: 800),
+          autoPlayCurve: Curves.fastOutSlowIn,
+          enlargeCenterPage: true,
+          scrollDirection: Axis.horizontal,
         ),
       ),
     );
   }
 
-
-
-  Widget buildCarouselSlider(BuildContext context, Project project, bool isPortrait, double screenHeight){
-    return PageStorage(
-        bucket: PageStorageBucket(),
-        child: CarouselSlider(
-          items: project.imageUrls
-              .map((imageUrl) => GestureDetector(
-            onTap: () {
-              _showImage(context, project.imageUrls, project.imageUrls.indexOf(imageUrl));
-            },
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-            ),
-          ))
-              .toList(),
-          options: CarouselOptions(
-            height: isPortrait ? 200 : screenHeight * 0.5,
-            aspectRatio: 16 / 9,
-            viewportFraction: 0.7,
-            initialPage: 0,
-            enableInfiniteScroll: true,
-            reverse: false,
-            autoPlay: true,
-            autoPlayInterval: Duration(seconds: 3),
-            autoPlayAnimationDuration: Duration(milliseconds: 800),
-            autoPlayCurve: Curves.fastOutSlowIn,
-            enlargeCenterPage: true,
-            scrollDirection: Axis.horizontal,
-          ),
-        )
-    );
-  }
 
   Widget buildSkills(List<String> skills) {
     return Column(
@@ -159,19 +167,41 @@ class ProjectDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Project project =
-    ModalRoute.of(context)!.settings.arguments as Project;
+    final Project project = ModalRoute.of(context)!.settings.arguments as Project;
 
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isPortrait = screenHeight > screenWidth;
+
+    double paddingValue = 12;
+    if (screenWidth > 320 && screenWidth <= 375) {
+      paddingValue = 12;
+    } else if (screenWidth > 375 && screenWidth <= 414) {
+      paddingValue = 24;
+    } else if (screenWidth > 414 && screenWidth <= 480) {
+      paddingValue = 36;
+    } else if (screenWidth > 480 && screenWidth <= 540) {
+      paddingValue = 48;
+    } else if (screenWidth > 540 && screenWidth <= 600) {
+      paddingValue = 60;
+    } else if (screenWidth > 600 && screenWidth <= 720) {
+      paddingValue = 72;
+    } else if (screenWidth > 720 && screenWidth <= 840) {
+      paddingValue = 84;
+    } else if (screenWidth > 840 && screenWidth <= 960) {
+      paddingValue = 96;
+    } else if (screenWidth > 960 && screenWidth <= 1080) {
+      paddingValue = 108;
+    } else if (screenWidth > 1080) {
+      paddingValue = 120;
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Project Detail"),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.only(left: paddingValue, right: paddingValue, top: 16, bottom: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -190,10 +220,12 @@ class ProjectDetailPage extends StatelessWidget {
             buildSkills(project.skills),
             SizedBox(height: 10),
             Expanded(
-              child: Text(
-                project.description,
-                style: TextStyle(
-                  fontSize: 17,
+              child: SingleChildScrollView(
+                child: Text(
+                  project.description,
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
                 ),
               ),
             ),
@@ -201,8 +233,8 @@ class ProjectDetailPage extends StatelessWidget {
           ],
         ),
       ),
-
-
     );
   }
+
+
 }
