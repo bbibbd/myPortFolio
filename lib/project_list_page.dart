@@ -15,6 +15,9 @@ class ProjectListPage extends StatefulWidget {
 class _ProjectListPageState extends State<ProjectListPage> {
   bool _isLandScape = false;
   String _sortCriteria = '중요도'; // 초기값으로 중요도를 기준으로 정렬
+  final Uri _url = Uri.parse('https://github.com/bbibbd');
+
+
 
   Widget buildSortDropdown() {
     return DropdownButton<String>(
@@ -52,6 +55,12 @@ class _ProjectListPageState extends State<ProjectListPage> {
     }
   }
 
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
   Widget buildDrawer(BuildContext context) {
     return Drawer(
       child: SingleChildScrollView(
@@ -75,7 +84,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
               title: Text('GitHub', style: TextStyle(fontSize: 16.0)),
               leading: Icon(Icons.code),
               onTap: () {
-                launch('https://github.com/bbibbd');
+                _launchUrl();
               },
             ),
             ListTile(
@@ -93,7 +102,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(''),
+                  Text('Designed by Gibeom Kim'),
                   Text('Address: 장량로114번길 23-8'),
                   Text('Phone: +82 10-6501-6514'),
                   Text('Email: gibeom@handong.ac.kr'),
@@ -348,6 +357,9 @@ class _ProjectListPageState extends State<ProjectListPage> {
                         (data['imageUrls'] as List<dynamic>)
                             .map((url) => url as String)
                             .toList();
+                    // final List<String> skills = (data['imageUrls'] as List<dynamic>)
+                    //     .map((url) => url as String)
+                    //     .toList();
                     return Project(
                       name: data['projectName'] as String,
                       description: data['description'] as String,

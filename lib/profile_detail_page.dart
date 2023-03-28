@@ -90,7 +90,7 @@ class ProfileDetailPage extends StatelessWidget {
                 ),
                 SizedBox(height: 4.0),
                 Text(
-                  '경북 포항시북구 장량로14번길 24-5',
+                  '경북 포항시북구 장량로114번길 24-5',
                   style: TextStyle(
                     color: Colors.black38,
                     fontSize: 12,
