@@ -155,6 +155,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                     fontSize: 10,
                     color: Colors.grey,
                   ),
+
                 ),
               ),
             ],
@@ -330,6 +331,14 @@ class _ProjectListPageState extends State<ProjectListPage> {
             );
           },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          )
+        ],
       ),
       drawer: buildDrawer(context),
       body: Padding(

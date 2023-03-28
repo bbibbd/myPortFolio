@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ProfileDetailPage extends StatelessWidget {
   const ProfileDetailPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile Detail'),
@@ -18,39 +20,118 @@ class ProfileDetailPage extends StatelessWidget {
   }
 
   Widget buildNarrowLayout(BuildContext context) {
-    return ListView.builder(
-      itemCount: 4,
-      itemBuilder: (BuildContext context, int index) {
-        switch (index) {
-          case 0:
-            return Column(
-              children: [
-                SizedBox(height: 16),
-                buildProfileCard(context),
-              ],
-            );
-          case 1:
-            return buildIntroduction(context);
-          case 2:
-            return buildSkills(context);
-          case 3:
-            return buildExperience(context);
-          default:
-            return SizedBox.shrink();
-        }
-      },
-    );
-  }
 
-  Widget buildProfileImage() {
-    return CircleAvatar(
-      radius: 50,
-      backgroundImage: NetworkImage(
-        'https://firebasestorage.googleapis.com/v0/b/myportfolio-eeeb5.appspot.com/o/profile%2FIMG_3101.JPG?alt=media&token=9585553e-2221-49d0-8648-1c265a5f3472',
+    double paddingValue = 12;
+    final double screenWidth = MediaQuery.of(context).size.width;
+
+    if (screenWidth > 320 && screenWidth <= 375) {
+      paddingValue = 12;
+    } else if (screenWidth > 375 && screenWidth <= 414) {
+      paddingValue = 20;
+    } else if (screenWidth > 414 && screenWidth <= 480) {
+      paddingValue = 28;
+    } else if (screenWidth > 480 && screenWidth <= 540) {
+      paddingValue = 36;
+    } else if (screenWidth > 540 && screenWidth <= 600) {
+      paddingValue = 44;
+    } else if (screenWidth > 600 && screenWidth <= 720) {
+      paddingValue = 52;
+    } else if (screenWidth > 720 && screenWidth <= 840) {
+      paddingValue = 60;
+    } else if (screenWidth > 840 && screenWidth <= 960) {
+      paddingValue = 68;
+    } else if (screenWidth > 960 && screenWidth <= 1080) {
+      paddingValue = 76;
+    } else if (screenWidth > 1080) {
+      paddingValue = 84;
+    }
+
+    return Padding(
+      padding: EdgeInsets.only(top: 12, bottom: 12, left: paddingValue, right: paddingValue),
+      child: ListView.builder(
+        itemCount: 4,
+        itemBuilder: (BuildContext context, int index) {
+          switch (index) {
+            case 0:
+              return Column(
+                children: [
+                  SizedBox(height: 16),
+                  buildProfileCard(context),
+                ],
+              );
+            case 1:
+              return buildIntroduction(context);
+            case 2:
+              return buildSkills(context);
+            case 3:
+              return buildExperience(context);
+            default:
+              return SizedBox.shrink();
+          }
+        },
       ),
     );
   }
 
+  void _showProfileImage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  color: Colors.black54,
+                ),
+              ),
+              Center(
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: PhotoView(
+                    imageProvider: NetworkImage(
+                        'https://firebasestorage.googleapis.com/v0/b/myportfolio-eeeb5.appspot.com/o/profile%2FIMG_3101.JPG?alt=media&token=9585553e-2221-49d0-8648-1c265a5f3472'),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 20,
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildProfileImage(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        _showProfileImage(context);
+      },
+      child: CircleAvatar(
+        radius: 50,
+        backgroundImage: NetworkImage(
+          'https://firebasestorage.googleapis.com/v0/b/myportfolio-eeeb5.appspot.com/o/profile%2FIMG_3101.JPG?alt=media&token=9585553e-2221-49d0-8648-1c265a5f3472',
+        ),
+      ),
+    );
+  }
   Widget buildProfileCard(BuildContext context) {
     return Card(
       elevation: 8.0,
@@ -58,7 +139,7 @@ class ProfileDetailPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(width: 16.0),
-          buildProfileImage(),
+          buildProfileImage(context),
           SizedBox(width: 16.0),
           Expanded(
             child: Column(
