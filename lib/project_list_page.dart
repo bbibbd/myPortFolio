@@ -15,7 +15,10 @@ class ProjectListPage extends StatefulWidget {
 class _ProjectListPageState extends State<ProjectListPage> {
   bool _isLandScape = false;
   String _sortCriteria = '중요도'; // 초기값으로 중요도를 기준으로 정렬
-  final Uri _url = Uri.parse('https://github.com/bbibbd');
+  final Uri _github = Uri.parse('https://github.com/bbibbd');
+  final Uri _instagram = Uri.parse('https://www.instagram.com/key_0312/');
+  final Uri _tistory = Uri.parse('https://musit.tistory.com/');
+  final Uri _kakaotalk = Uri.parse('qr.kakao.com/talk/sX6zLpJvLBbDoOHw9yNUzYMfLUk-');
 
   Widget buildSortDropdown() {
     return DropdownButton<String>(
@@ -53,9 +56,9 @@ class _ProjectListPageState extends State<ProjectListPage> {
     }
   }
 
-  Future<void> _launchUrl() async {
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
     }
   }
 
@@ -82,7 +85,28 @@ class _ProjectListPageState extends State<ProjectListPage> {
               title: Text('GitHub', style: TextStyle(fontSize: 16.0)),
               leading: Icon(Icons.code),
               onTap: () {
-                _launchUrl();
+                _launchUrl(_github);
+              },
+            ),
+            ListTile(
+              title: Text('Instagram', style: TextStyle(fontSize: 16.0)),
+              leading: Icon(Icons.chat),
+              onTap: () {
+                _launchUrl(_instagram);
+              },
+            ),
+            ListTile(
+              title: Text('Tistory', style: TextStyle(fontSize: 16.0)),
+              leading: Icon(Icons.chat),
+              onTap: () {
+                _launchUrl(_tistory);
+              },
+            ),
+            ListTile(
+              title: Text('Kakao', style: TextStyle(fontSize: 16.0)),
+              leading: Icon(Icons.chat),
+              onTap: () {
+                _launchUrl(_kakaotalk);
               },
             ),
             ListTile(
