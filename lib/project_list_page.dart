@@ -441,6 +441,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                       imageUrls: imageUrls,
                       skills: skills,
                       impression: data['느낀점'] as String,
+                      importance: data['중요도'] as String,
                     );
                   }).toList();
 

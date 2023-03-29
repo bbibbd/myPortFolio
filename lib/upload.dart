@@ -17,6 +17,7 @@ class _UploadPageState extends State<UploadPage> {
   final _imageUrlsController = TextEditingController();
   final _skillsController = TextEditingController();
   final _feelingController = TextEditingController();
+  final _importanceController = TextEditingController();
 
   bool _isLoading = false;
 
@@ -38,6 +39,7 @@ class _UploadPageState extends State<UploadPage> {
             .map((skill) => skill.trim())
             .toList(),
         impression: _feelingController.text,
+        importance: _importanceController.text
       );
 
       try {
@@ -50,6 +52,7 @@ class _UploadPageState extends State<UploadPage> {
           'imageUrls': project.imageUrls,
           '주요기술': project.skills,
           '느낀점': project.impression,
+          '중요도': project.importance,
         });
         setState(() {
           _isLoading = false;
@@ -196,6 +199,13 @@ class _UploadPageState extends State<UploadPage> {
                           labelText: 'Feeling',
                         ),
                       ),
+                      SizedBox(height: 16,),
+                      TextFormField(
+                        controller: _importanceController,
+                        decoration: InputDecoration(
+                          labelText: 'Feeling',
+                        ),
+                      )
 
                     ],
                   ),
