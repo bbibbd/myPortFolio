@@ -439,7 +439,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
                       startDate: (data['startDate'] as Timestamp).toDate(),
                       endDate: (data['endDate'] as Timestamp).toDate(),
                       imageUrls: imageUrls,
-                      skills: skills
+                      skills: skills,
+                      impression: data['느낀점'] as String,
                     );
                   }).toList();
 

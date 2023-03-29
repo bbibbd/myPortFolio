@@ -147,7 +147,7 @@ class ProjectDetailPage extends StatelessWidget {
         Text(
           '주요 기술',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -196,41 +196,73 @@ class ProjectDetailPage extends StatelessWidget {
       paddingValue = 120;
     }
 
+    Widget buildParagraph(String text, String delimiter) {
+      final paragraphs = text.split(delimiter);
+      final widgets = <Widget>[];
+
+      for (int i = 0; i < paragraphs.length; i++) {
+        final paragraph = paragraphs[i];
+        widgets.add(Text(
+          paragraph.trim(),
+          style: TextStyle(fontSize: 20),
+        ));
+        if (i != paragraphs.length - 1) {
+          widgets.add(SizedBox(height: 10));
+        }
+      }
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: widgets,
+      );
+    }
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Project Detail"),
       ),
-      body: Padding(
-        padding: EdgeInsets.only(left: paddingValue, right: paddingValue, top: 16, bottom: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            buildCarouselSlider(context, project, isPortrait, screenHeight),
-            SizedBox(height: 10),
-            Text(
-              project.name,
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            buildDate(project),
-            SizedBox(height: 10),
-            buildSkills(project.skills),
-            SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Text(
-                  project.description,
-                  style: TextStyle(
-                    fontSize: 17,
-                  ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(left: paddingValue, right: paddingValue, top: 16, bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              buildCarouselSlider(context, project, isPortrait, screenHeight),
+              SizedBox(height: 10),
+              Text(
+                project.name,
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            SizedBox(height: 16),
-          ],
+              SizedBox(height: 10),
+              buildDate(project),
+              SizedBox(height: 10),
+              buildSkills(project.skills),
+              SizedBox(height: 10),
+              Text(
+                "프로젝트 설명",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              buildParagraph(project.description, "\\n\\n"),
+              SizedBox(height: 10),
+              Text(
+                "배우고 느낀점",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              buildParagraph(project.impression, "\\n\\n"),
+            ],
+          ),
         ),
       ),
     );

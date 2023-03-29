@@ -2,6 +2,7 @@ class Project {
   final String name;
   final String description;
   final String imageUrl;
+  final String impression;
   final DateTime startDate;
   final DateTime endDate;
   final List<String> imageUrls;
@@ -13,6 +14,8 @@ class Project {
     required this.imageUrl,
     required this.startDate,
     required this.endDate,
-    required this.imageUrls, required this.skills,
+    required this.imageUrls, required this.skills, required this.impression,
   });
+
+
 }
