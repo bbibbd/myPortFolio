@@ -100,9 +100,6 @@ class ProjectDetailPage extends StatelessWidget {
     );
   }
 
-
-
-
   Widget buildCarouselSlider(
       BuildContext context, Project project, bool isPortrait, double screenHeight) {
     return PageStorage(
@@ -233,7 +230,7 @@ class ProjectDetailPage extends StatelessWidget {
               Text(
                 project.name,
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
