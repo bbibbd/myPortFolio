@@ -365,10 +365,85 @@ class _ProjectListPageState extends State<ProjectListPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget buildProfileWidget() {
+    return FutureBuilder<DocumentSnapshot>(
+      future: FirebaseFirestore.instance
+          .collection('users')
+          .doc('profile')
+          .get(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Text('에러가 발생했습니다.'),
+          );
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        final data = snapshot.data!.data() as Map<String, dynamic>;
+
+        return ProfileWidget(
+          name: data['name'],
+          imageUrl: data['profileImageUrl'],
+          introduction: data['introduction'],
+        );
+      },
+    );
+  }
+
+  Widget buildProjectList(){
+    return SizedBox(
+      height: MediaQuery.of(context).size.height - 216, // 216 is the estimated height of the header and footer
+      child: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('Projects')
+            .orderBy(orderBy(_sortCriteria), descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+          final projects = snapshot.data!.docs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            final List<String> imageUrls =
+            (data['imageUrls'] as List<dynamic>)
+                .map((url) => url as String)
+                .toList();
+            final List<String> skills = (data['주요기술'] as List<dynamic>)
+                .map((url) => url as String)
+                .toList();
+
+            return Project(
+              name: data['projectName'] as String,
+              description: data['description'] as String,
+              imageUrl: data['imageUrl'] as String,
+              startDate: (data['startDate'] as Timestamp).toDate(),
+              endDate: (data['endDate'] as Timestamp).toDate(),
+              imageUrls: imageUrls,
+              skills: skills,
+              impression: data['느낀점'] as String,
+              importance: data['중요도'] as String,
+            );
+          }).toList();
+
+          if (_isLandScape) {
+            return buildGridView(projects);
+          } else {
+            return buildListView(projects);
+          }
+        },
+      ),
+    );
+  }
+
+  double getPaddingValue(double screenWidth){
     double paddingValue = 12;
-    final double screenWidth = MediaQuery.of(context).size.width;
 
     if (screenWidth > 320 && screenWidth <= 375) {
       paddingValue = 12;
@@ -392,29 +467,46 @@ class _ProjectListPageState extends State<ProjectListPage> {
       paddingValue = 84;
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('My Portfolio'),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            );
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: (){
-              Navigator.pop(context);
+    return paddingValue;
+  }
+
+  AppBar buildAppBar(){
+    return AppBar(
+      title: Text('My Portfolio'),
+      leading: Builder(
+        builder: (BuildContext context) {
+          return IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
             },
-          )
-        ],
+            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          );
+        },
       ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.logout),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        )
+      ],
+
+    );
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    double paddingValue = 12;
+    final double screenWidth = MediaQuery.of(context).size.width;
+
+    paddingValue = getPaddingValue(screenWidth);
+
+    return Scaffold(
+      appBar: buildAppBar(),
       drawer: buildDrawer(context),
       body: SingleChildScrollView(
         child: Padding(
@@ -422,33 +514,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FutureBuilder<DocumentSnapshot>(
-                future: FirebaseFirestore.instance
-                    .collection('users')
-                    .doc('profile')
-                    .get(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text('에러가 발생했습니다.'),
-                    );
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  final data = snapshot.data!.data() as Map<String, dynamic>;
-
-                  return ProfileWidget(
-                    name: data['name'],
-                    imageUrl: data['profileImageUrl'],
-                    introduction: data['introduction'],
-                  );
-                },
-              ),
+              buildProfileWidget(),
               SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -461,51 +527,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                 ],
               ),
               SizedBox(height: 16),
-              SizedBox(
-                height: MediaQuery.of(context).size.height - 216, // 216 is the estimated height of the header and footer
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('Projects')
-                      .orderBy(orderBy(_sortCriteria), descending: false)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    }
-                    if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    final projects = snapshot.data!.docs.map((doc) {
-                      final data = doc.data() as Map<String, dynamic>;
-                      final List<String> imageUrls =
-                      (data['imageUrls'] as List<dynamic>)
-                          .map((url) => url as String)
-                          .toList();
-                      final List<String> skills = (data['주요기술'] as List<dynamic>)
-                          .map((url) => url as String)
-                          .toList();
-
-                      return Project(
-                        name: data['projectName'] as String,
-                        description: data['description'] as String,
-                        imageUrl: data['imageUrl'] as String,
-                        startDate: (data['startDate'] as Timestamp).toDate(),
-                        endDate: (data['endDate'] as Timestamp).toDate(),
-                        imageUrls: imageUrls,
-                        skills: skills,
-                        impression: data['느낀점'] as String,
-                        importance: data['중요도'] as String,
-                      );
-                    }).toList();
-
-                    if (_isLandScape) {
-                      return buildGridView(projects);
-                    } else {
-                      return buildListView(projects);
-                    }
-                  },
-                ),
-              ),
+              buildProjectList(),
             ],
           ),
         ),
