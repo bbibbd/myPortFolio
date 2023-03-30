@@ -19,6 +19,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
   final Uri _instagram = Uri.parse('https://www.instagram.com/key_0312/');
   final Uri _tistory = Uri.parse('https://musit.tistory.com/');
   final Uri _kakaotalk = Uri.parse('qr.kakao.com/talk/sX6zLpJvLBbDoOHw9yNUzYMfLUk-');
+  String _password = '';
+
 
   Widget buildSortDropdown() {
     return DropdownButton<String>(
@@ -110,10 +112,59 @@ class _ProjectListPageState extends State<ProjectListPage> {
               },
             ),
             ListTile(
-              title: Text('Write a Post', style: TextStyle(fontSize: 16.0)),
+              title: Text('글쓰기', style: TextStyle(fontSize: 16.0)),
               leading: Icon(Icons.edit),
               onTap: () {
-                Navigator.pushNamed(context, '/upload');
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('암호 입력'),
+                      content: TextFormField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: '암호를 입력하세요.',
+                        ),
+                        onChanged: (value) {
+                          _password = value;
+                        },
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('취소'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: Text('확인'),
+                          onPressed: () {
+                            if (_password == 'dslove1109') { // 암호가 맞는 경우
+                              Navigator.pushNamed(context, '/upload');
+                            } else { // 암호가 틀린 경우
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('암호가 틀렸습니다.'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('확인'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
             ),
             Divider(),
@@ -365,97 +416,101 @@ class _ProjectListPageState extends State<ProjectListPage> {
         ],
       ),
       drawer: buildDrawer(context),
-      body: Padding(
-        padding: EdgeInsets.only(left:paddingValue, right: paddingValue, top: 16.0, bottom: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FutureBuilder<DocumentSnapshot>(
-              future: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc('profile')
-                  .get(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text('에러가 발생했습니다.'),
-                  );
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                final data = snapshot.data!.data() as Map<String, dynamic>;
-
-                return ProfileWidget(
-                  name: data['name'],
-                  imageUrl: data['profileImageUrl'],
-                  introduction: data['introduction'],
-                );
-              },
-            ),
-            SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Projects',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                buildSortDropdown(),
-              ],
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('Projects')
-                    .orderBy(orderBy(_sortCriteria), descending: false)
-                    .snapshots(),
-                builder: (context, snapshot) {
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(left:paddingValue, right: paddingValue, top: 16.0, bottom: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FutureBuilder<DocumentSnapshot>(
+                future: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc('profile')
+                    .get(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
-                  if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  final projects = snapshot.data!.docs.map((doc) {
-                    final data = doc.data() as Map<String, dynamic>;
-                    final List<String> imageUrls =
-                        (data['imageUrls'] as List<dynamic>)
-                            .map((url) => url as String)
-                            .toList();
-                    final List<String> skills = (data['주요기술'] as List<dynamic>)
-                        .map((url) => url as String)
-                        .toList();
-
-                    return Project(
-                      name: data['projectName'] as String,
-                      description: data['description'] as String,
-                      imageUrl: data['imageUrl'] as String,
-                      startDate: (data['startDate'] as Timestamp).toDate(),
-                      endDate: (data['endDate'] as Timestamp).toDate(),
-                      imageUrls: imageUrls,
-                      skills: skills,
-                      impression: data['느낀점'] as String,
-                      importance: data['중요도'] as String,
+                    return Center(
+                      child: Text('에러가 발생했습니다.'),
                     );
-                  }).toList();
-
-                  if (_isLandScape) {
-                    return buildGridView(projects);
-                  } else {
-                    return buildListView(projects);
                   }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  final data = snapshot.data!.data() as Map<String, dynamic>;
+
+                  return ProfileWidget(
+                    name: data['name'],
+                    imageUrl: data['profileImageUrl'],
+                    introduction: data['introduction'],
+                  );
                 },
               ),
-            ),
-          ],
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Projects',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  buildSortDropdown(),
+                ],
+              ),
+              SizedBox(height: 16),
+              SizedBox(
+                height: MediaQuery.of(context).size.height - 216, // 216 is the estimated height of the header and footer
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Projects')
+                      .orderBy(orderBy(_sortCriteria), descending: false)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    final projects = snapshot.data!.docs.map((doc) {
+                      final data = doc.data() as Map<String, dynamic>;
+                      final List<String> imageUrls =
+                      (data['imageUrls'] as List<dynamic>)
+                          .map((url) => url as String)
+                          .toList();
+                      final List<String> skills = (data['주요기술'] as List<dynamic>)
+                          .map((url) => url as String)
+                          .toList();
+
+                      return Project(
+                        name: data['projectName'] as String,
+                        description: data['description'] as String,
+                        imageUrl: data['imageUrl'] as String,
+                        startDate: (data['startDate'] as Timestamp).toDate(),
+                        endDate: (data['endDate'] as Timestamp).toDate(),
+                        imageUrls: imageUrls,
+                        skills: skills,
+                        impression: data['느낀점'] as String,
+                        importance: data['중요도'] as String,
+                      );
+                    }).toList();
+
+                    if (_isLandScape) {
+                      return buildGridView(projects);
+                    } else {
+                      return buildListView(projects);
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+
     );
   }
 }
