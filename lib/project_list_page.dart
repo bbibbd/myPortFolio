@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'profiel_widget.dart';
 import 'project.dart';
 import 'package:intl/intl.dart';
+import 'utility.dart';
 
 class ProjectListPage extends StatefulWidget {
   const ProjectListPage({Key? key}) : super(key: key);
@@ -18,9 +19,10 @@ class _ProjectListPageState extends State<ProjectListPage> {
   final Uri _github = Uri.parse('https://github.com/bbibbd');
   final Uri _instagram = Uri.parse('https://www.instagram.com/key_0312/');
   final Uri _tistory = Uri.parse('https://musit.tistory.com/');
-  final Uri _kakaotalk = Uri.parse('qr.kakao.com/talk/sX6zLpJvLBbDoOHw9yNUzYMfLUk-');
+  final Uri _kakaotalk =
+      Uri.parse('qr.kakao.com/talk/sX6zLpJvLBbDoOHw9yNUzYMfLUk-');
   String _password = '';
-
+  String _selectedCategory = '전체';
 
   Widget buildSortDropdown() {
     return DropdownButton<String>(
@@ -30,7 +32,25 @@ class _ProjectListPageState extends State<ProjectListPage> {
           _sortCriteria = value!;
         });
       },
-      items: <String>['중요도', '시작일']
+      items:
+          <String>['중요도', '시작일'].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget buildCategoryDropdown() {
+    return DropdownButton<String>(
+      value: _selectedCategory,
+      onChanged: (String? value) {
+        setState(() {
+          _selectedCategory = value!;
+        });
+      },
+      items: <String>['전체', '대표 프로젝트', '졸업연구', '산학 연구', '수업 프로젝트', '대외활동', '기타']
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -71,8 +91,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: Text('김기범', style: TextStyle(fontSize: 18.0)),
-              accountEmail: Text('gibeom@handong.ac.kr'),
-              currentAccountPicture: CircleAvatar(
+              accountEmail: const Text('gibeom@handong.ac.kr'),
+              currentAccountPicture: const CircleAvatar(
                 radius: 60.0,
                 backgroundImage: NetworkImage(
                   'https://firebasestorage.googleapis.com/v0/b/myportfolio-eeeb5.appspot.com/o/profile%2FIMG_3101.JPG?alt=media&token=9585553e-2221-49d0-8648-1c265a5f3472',
@@ -139,9 +159,11 @@ class _ProjectListPageState extends State<ProjectListPage> {
                         TextButton(
                           child: Text('확인'),
                           onPressed: () {
-                            if (_password == 'dslove1109') { // 암호가 맞는 경우
+                            if (_password == 'dslove1109') {
+                              // 암호가 맞는 경우
                               Navigator.pushNamed(context, '/upload');
-                            } else { // 암호가 틀린 경우
+                            } else {
+                              // 암호가 틀린 경우
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
@@ -230,7 +252,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
                     fontSize: 10,
                     color: Colors.grey,
                   ),
-
                 ),
               ),
             ],
@@ -286,6 +307,15 @@ class _ProjectListPageState extends State<ProjectListPage> {
                       ),
                       SizedBox(height: 8),
                       Text(
+                        project.category,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(height: 8,),
+                      Text(
                         project.description,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -339,6 +369,15 @@ class _ProjectListPageState extends State<ProjectListPage> {
                       ),
                       SizedBox(height: 8),
                       Text(
+                        project.category,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
                         project.description,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -356,22 +395,20 @@ class _ProjectListPageState extends State<ProjectListPage> {
     );
   }
 
-  String orderBy(String order){
-    if(order == "시작일"){
+  String orderBy(String order) {
+    if (order == "시작일") {
       return "startDate";
-    }
-    else{
+    } else {
       return order;
     }
   }
 
   Widget buildProfileWidget() {
     return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance
-          .collection('users')
-          .doc('profile')
-          .get(),
-      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+      future:
+          FirebaseFirestore.instance.collection('users').doc('profile').get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
           return Center(
             child: Text('에러가 발생했습니다.'),
@@ -388,20 +425,18 @@ class _ProjectListPageState extends State<ProjectListPage> {
         return ProfileWidget(
           name: data['name'],
           imageUrl: data['profileImageUrl'],
-          introduction: data['introduction'],
+          introduction: data['shortIntroduction'],
         );
       },
     );
   }
 
-  Widget buildProjectList(){
+  Widget buildProjectList() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 216, // 216 is the estimated height of the header and footer
+      height: MediaQuery.of(context).size.height -
+          216, // 216 is the estimated height of the header and footer
       child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('Projects')
-            .orderBy(orderBy(_sortCriteria), descending: false)
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection('Projects').orderBy('중요도', descending: false).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -409,30 +444,102 @@ class _ProjectListPageState extends State<ProjectListPage> {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
-          final projects = snapshot.data!.docs.map((doc) {
-            final data = doc.data() as Map<String, dynamic>;
-            final List<String> imageUrls =
-            (data['imageUrls'] as List<dynamic>)
-                .map((url) => url as String)
-                .toList();
-            final List<String> skills = (data['주요기술'] as List<dynamic>)
-                .map((url) => url as String)
-                .toList();
+          List<Project> projects = [];
 
-            return Project(
-              name: data['projectName'] as String,
-              description: data['description'] as String,
-              imageUrl: data['imageUrl'] as String,
-              startDate: (data['startDate'] as Timestamp).toDate(),
-              endDate: (data['endDate'] as Timestamp).toDate(),
-              imageUrls: imageUrls,
-              skills: skills,
-              impression: data['느낀점'] as String,
-              importance: data['중요도'] as String,
-            );
-          }).toList();
+          // Filter projects by category
+          if (_selectedCategory == '전체') {
+            // Show all projects
+            projects = snapshot.data!.docs.map((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              final List<String> imageUrls =
+                  (data['imageUrls'] as List<dynamic>)
+                      .map((url) => url as String)
+                      .toList();
+              final List<String> skills = (data['주요기술'] as List<dynamic>)
+                  .map((url) => url as String)
+                  .toList();
 
-          if (_isLandScape) {
+              return Project(
+                name: data['projectName'] as String,
+                description: data['description'] as String,
+                imageUrl: data['imageUrl'] as String,
+                startDate: (data['startDate'] as Timestamp).toDate(),
+                endDate: (data['endDate'] as Timestamp).toDate(),
+                imageUrls: imageUrls,
+                skills: skills,
+                impression: data['느낀점'] as String,
+                importance: data['중요도'] as String,
+                category: data['category'] as String,
+              );
+            }).toList();
+          } else if(_selectedCategory == '대표 프로젝트'){
+            projects = snapshot.data!.docs.map((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              final List<String> imageUrls =
+              (data['imageUrls'] as List<dynamic>)
+                  .map((url) => url as String)
+                  .toList();
+              final List<String> skills = (data['주요기술'] as List<dynamic>)
+                  .map((url) => url as String)
+                  .toList();
+              if (data['대표'] == true){
+                return Project(
+                  name: data['projectName'] as String,
+                  description: data['description'] as String,
+                  imageUrl: data['imageUrl'] as String,
+                  startDate: (data['startDate'] as Timestamp).toDate(),
+                  endDate: (data['endDate'] as Timestamp).toDate(),
+                  imageUrls: imageUrls,
+                  skills: skills,
+                  impression: data['느낀점'] as String,
+                  importance: data['중요도'] as String,
+                  category: data['category'] as String,
+                );
+              }else {
+                return null;
+              }
+            }) .where((p) => p != null)
+                .toList()
+                .cast<
+                Project>(); // Add this line to cast the list to List<Projec
+          }
+          else {
+            // Filter projects by category
+            projects = snapshot.data!.docs
+                .map((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              final List<String> imageUrls =
+              (data['imageUrls'] as List<dynamic>)
+                  .map((url) => url as String)
+                  .toList();
+              final List<String> skills = (data['주요기술'] as List<dynamic>)
+                  .map((url) => url as String)
+                  .toList();
+
+              if (data['category'] == _selectedCategory) {
+                return Project(
+                  name: data['projectName'] as String,
+                  description: data['description'] as String,
+                  imageUrl: data['imageUrl'] as String,
+                  startDate: (data['startDate'] as Timestamp).toDate(),
+                  endDate: (data['endDate'] as Timestamp).toDate(),
+                  imageUrls: imageUrls,
+                  skills: skills,
+                  impression: data['느낀점'] as String,
+                  importance: data['중요도'] as String,
+                  category: data['category'] as String,
+                );
+              } else {
+                return null;
+              }
+            })
+                .where((p) => p != null)
+                .toList()
+                .cast<
+                Project>(); // Add this line to cast the list to List<Project>
+          }
+
+            if (_isLandScape) {
             return buildGridView(projects);
           } else {
             return buildListView(projects);
@@ -442,35 +549,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
     );
   }
 
-  double getPaddingValue(double screenWidth){
-    double paddingValue = 12;
-
-    if (screenWidth > 320 && screenWidth <= 375) {
-      paddingValue = 12;
-    } else if (screenWidth > 375 && screenWidth <= 414) {
-      paddingValue = 20;
-    } else if (screenWidth > 414 && screenWidth <= 480) {
-      paddingValue = 28;
-    } else if (screenWidth > 480 && screenWidth <= 540) {
-      paddingValue = 36;
-    } else if (screenWidth > 540 && screenWidth <= 600) {
-      paddingValue = 44;
-    } else if (screenWidth > 600 && screenWidth <= 720) {
-      paddingValue = 52;
-    } else if (screenWidth > 720 && screenWidth <= 840) {
-      paddingValue = 60;
-    } else if (screenWidth > 840 && screenWidth <= 960) {
-      paddingValue = 68;
-    } else if (screenWidth > 960 && screenWidth <= 1080) {
-      paddingValue = 76;
-    } else if (screenWidth > 1080) {
-      paddingValue = 84;
-    }
-
-    return paddingValue;
-  }
-
-  AppBar buildAppBar(){
+  AppBar buildAppBar() {
     return AppBar(
       title: Text('My Portfolio'),
       leading: Builder(
@@ -487,16 +566,13 @@ class _ProjectListPageState extends State<ProjectListPage> {
       actions: [
         IconButton(
           icon: Icon(Icons.logout),
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
         )
       ],
-
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -510,7 +586,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
       drawer: buildDrawer(context),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(left:paddingValue, right: paddingValue, top: 16.0, bottom: 16.0),
+          padding: EdgeInsets.only(
+              left: paddingValue, right: paddingValue, top: 16.0, bottom: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -523,7 +600,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                     'Projects',
                     style: Theme.of(context).textTheme.headline6,
                   ),
-                  buildSortDropdown(),
+                  buildCategoryDropdown(),
                 ],
               ),
               SizedBox(height: 16),
@@ -532,7 +609,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
           ),
         ),
       ),
-
     );
   }
 }

@@ -235,6 +235,15 @@ class ProjectDetailPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
+              Text(
+                project.category,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+              SizedBox(height: 10),
               buildDate(project),
               SizedBox(height: 10),
               buildSkills(project.skills),
