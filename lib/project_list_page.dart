@@ -50,7 +50,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
           _selectedCategory = value!;
         });
       },
-      items: <String>['전체', '대표 프로젝트', '졸업연구', '산학 연구', '수업 프로젝트', '대외활동', '기타']
+      items: <String>['전체', '대표 프로젝트', '졸업 연구', '산학 연구', '수업 프로젝트', '학회 활동', '대외 활동']
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,

@@ -136,30 +136,49 @@ class ProjectDetailPage extends StatelessWidget {
     );
   }
 
+  Widget buildSkills(Project project) {
 
-  Widget buildSkills(List<String> skills) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '주요 기술',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+    if(project.category == "대외 활동"){
+      return Text("");
+    } else{
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            children: project.skills.map((skill) {
+              return Chip(
+                label: Text(skill),
+                backgroundColor: Colors.grey[300],
+              );
+            }).toList(),
           ),
+        ],
+      );
+    }
+  }
+
+  Widget buildTitleText(Project project){
+    if(project.category == "대외 활동"){
+      return Text(
+        "활동내용",
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
         ),
-        SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          children: skills.map((skill) {
-            return Chip(
-              label: Text(skill),
-              backgroundColor: Colors.grey[300],
-            );
-          }).toList(),
+      );
+    }
+    else{
+      return Text(
+        "프로젝트 설명",
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
         ),
-      ],
-    );
+      );
+    }
   }
 
   @override
@@ -245,16 +264,9 @@ class ProjectDetailPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
               buildDate(project),
+              buildSkills(project),
               SizedBox(height: 10),
-              buildSkills(project.skills),
-              SizedBox(height: 10),
-              Text(
-                "프로젝트 설명",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              buildTitleText(project),
               SizedBox(height: 10),
               buildParagraph(project.description, "\\n\\n"),
               SizedBox(height: 10),
