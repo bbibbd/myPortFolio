@@ -6,11 +6,23 @@ import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:portfolio/utility.dart';
 
-
-class ProjectDetailPage extends StatelessWidget {
+class ProjectDetailPage extends StatefulWidget {
   const ProjectDetailPage({Key? key}) : super(key: key);
 
-  Widget buildDate(Project project){
+  @override
+  _ProjectDetailPageState createState() => _ProjectDetailPageState();
+}
+
+class _ProjectDetailPageState extends State<ProjectDetailPage> {
+  bool _isSummary = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _isSummary = false; // 초기값 설정
+  }
+
+  Widget buildDate(Project project) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -46,7 +58,8 @@ class ProjectDetailPage extends StatelessWidget {
     );
   }
 
-  void _showImage(BuildContext context, List<String> imageUrls, int initialIndex) {
+  void _showImage(
+      BuildContext context, List<String> imageUrls, int initialIndex) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -73,7 +86,7 @@ class ProjectDetailPage extends StatelessWidget {
                       imageProvider: NetworkImage(imageUrls[index]),
                       initialScale: PhotoViewComputedScale.contained,
                       heroAttributes:
-                      PhotoViewHeroAttributes(tag: imageUrls[index]),
+                          PhotoViewHeroAttributes(tag: imageUrls[index]),
                     );
                   },
                   scrollPhysics: const BouncingScrollPhysics(),
@@ -102,8 +115,8 @@ class ProjectDetailPage extends StatelessWidget {
     );
   }
 
-  Widget buildCarouselSlider(
-      BuildContext context, Project project, bool isPortrait, double screenHeight) {
+  Widget buildCarouselSlider(BuildContext context, Project project,
+      bool isPortrait, double screenHeight) {
     return PageStorage(
       bucket: PageStorageBucket(),
       child: CarouselSlider(
@@ -111,14 +124,14 @@ class ProjectDetailPage extends StatelessWidget {
             .asMap()
             .entries
             .map((entry) => InkWell(
-          onTap: () {
-            _showImage(context, project.imageUrls, entry.key);
-          },
-          child: Image.network(
-            entry.value,
-            fit: BoxFit.cover,
-          ),
-        ))
+                  onTap: () {
+                    _showImage(context, project.imageUrls, entry.key);
+                  },
+                  child: Image.network(
+                    entry.value,
+                    fit: BoxFit.cover,
+                  ),
+                ))
             .toList(),
         options: CarouselOptions(
           height: isPortrait ? 200 : screenHeight * 0.38,
@@ -139,14 +152,12 @@ class ProjectDetailPage extends StatelessWidget {
   }
 
   Widget buildSkills(Project project) {
-
-    if(project.category == "대외 활동"){
+    if (project.category == "대외 활동") {
       return Text("");
-    } else{
+    } else {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -162,8 +173,8 @@ class ProjectDetailPage extends StatelessWidget {
     }
   }
 
-  Widget buildTitleText(Project project){
-    if(project.category == "대외 활동"){
+  Widget buildTitleText(Project project) {
+    if (project.category == "대외 활동") {
       return Text(
         "활동내용",
         style: TextStyle(
@@ -171,8 +182,7 @@ class ProjectDetailPage extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       );
-    }
-    else{
+    } else {
       return Text(
         "프로젝트 설명",
         style: TextStyle(
@@ -185,7 +195,8 @@ class ProjectDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Project project = ModalRoute.of(context)!.settings.arguments as Project;
+    final Project project =
+        ModalRoute.of(context)!.settings.arguments as Project;
 
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -214,14 +225,14 @@ class ProjectDetailPage extends StatelessWidget {
       );
     }
 
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Project Detail"),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(left: paddingValue, right: paddingValue, top: 16, bottom: 16),
+          padding: EdgeInsets.only(
+              left: paddingValue, right: paddingValue, top: 16, bottom: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -247,25 +258,57 @@ class ProjectDetailPage extends StatelessWidget {
               buildDate(project),
               buildSkills(project),
               SizedBox(height: 20),
-              // buildTitleText(project),
-              // SizedBox(height: 10),
-              buildParagraph(project.description, "\\n\\n"),
-              SizedBox(height: 20),
-              Text(
-                "배우고 느낀점",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _isSummary = false;
+                      });
+                    },
+                    child: Text('전체'),
+                    style: ElevatedButton.styleFrom(
+                      primary: _isSummary ? Colors.grey : null,
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _isSummary = true;
+                      });
+                    },
+                    child: Text('요약'),
+                    style: ElevatedButton.styleFrom(
+                      primary: !_isSummary ? Colors.grey : null,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20),
-              buildParagraph(project.impression, "\\n\\n"),
+              SizedBox(height: 10),
+              _isSummary
+                  ? buildParagraph(project.summary, "\\n\\n")
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildParagraph(project.description, "\\n\\n"),
+                        SizedBox(height: 20),
+                        Text(
+                          "배우고 느낀점",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        buildParagraph(project.impression, "\n\n"),
+                      ],
+                    ),
             ],
           ),
         ),
       ),
     );
   }
-
-
 }

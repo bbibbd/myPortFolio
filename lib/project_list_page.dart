@@ -555,22 +555,74 @@ class _ProjectListPageState extends State<ProjectListPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: Text('My Portfolio'),
-      leading: Builder(
-        builder: (BuildContext context) {
-          return IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-          );
-        },
-      ),
+      leading: null,
+      // leading: Builder(
+      //   builder: (BuildContext context) {
+      //     return IconButton(
+      //       icon: const Icon(Icons.menu),
+      //       onPressed: () {
+      //         Scaffold.of(context).openDrawer();
+      //       },
+      //       tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+      //     );
+      //   },
+      // ),
       actions: [
         IconButton(
-          icon: Icon(Icons.logout),
+          icon: Icon(Icons.edit),
           onPressed: () {
-            Navigator.pop(context);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('암호 입력'),
+                  content: TextFormField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: '암호를 입력하세요.',
+                    ),
+                    onChanged: (value) {
+                      _password = value;
+                    },
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('취소'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text('확인'),
+                      onPressed: () {
+                        if (_password == 'dslove1109') {
+                          // 암호가 맞는 경우
+                          Navigator.pushNamed(context, '/upload');
+                        } else {
+                          // 암호가 틀린 경우
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('암호가 틀렸습니다.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text('확인'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
           },
         )
       ],

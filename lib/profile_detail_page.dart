@@ -33,7 +33,7 @@ class ProfileDetailPage extends StatelessWidget {
           top: 12, bottom: 12, left: paddingValue, right: paddingValue),
       child: FutureBuilder<DocumentSnapshot>(
         future:
-            FirebaseFirestore.instance.collection('users').doc('profile').get(),
+        FirebaseFirestore.instance.collection('users').doc('profile').get(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
@@ -389,9 +389,9 @@ class ProfileDetailPage extends StatelessWidget {
               final projects = snapshot.data!.docs.map((doc) {
                 final data = doc.data() as Map<String, dynamic>;
                 final List<String> imageUrls =
-                    (data['imageUrls'] as List<dynamic>)
-                        .map((url) => url as String)
-                        .toList();
+                (data['imageUrls'] as List<dynamic>)
+                    .map((url) => url as String)
+                    .toList();
                 final List<String> skills = (data['주요기술'] as List<dynamic>)
                     .map((skill) => skill as String)
                     .toList();
@@ -419,46 +419,46 @@ class ProfileDetailPage extends StatelessWidget {
                 children: projects
                     .map(
                       (project) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "• ",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              Text(
-                                '${DateFormat('yyyy.MM').format(project.startDate)} ~ ${DateFormat('yyyy.MM').format(project.endDate)}: ',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              Expanded(
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/projectDetail', arguments: project);
-                                  },
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      '[${project.category}] ${project.name}',
-                                      style: TextStyle(
-                                        color: Colors.blueAccent,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                    ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "• ",
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            '${DateFormat('yyyy.MM').format(project.startDate)} ~ ${DateFormat('yyyy.MM').format(project.endDate)}: ',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/projectDetail', arguments: project);
+                              },
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '[${project.category}] ${project.name}',
+                                  style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    decoration: TextDecoration.underline,
                                   ),
                                 ),
                               ),
-                            ],
+                            ),
                           ),
-                          //const SizedBox(height: 4),
                         ],
                       ),
-                    )
+                      //const SizedBox(height: 4),
+                    ],
+                  ),
+                )
                     .toList(),
               );
             },
