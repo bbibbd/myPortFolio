@@ -409,7 +409,9 @@ class ProfileDetailPage extends StatelessWidget {
                     skills: skills,
                     importance: data['중요도'] as String,
                     category: data['category'] as String,
+                    summary: data['summary'] as String,
                     impression: data['느낀점'] as String);
+
               }).toList();
 
               return Column(

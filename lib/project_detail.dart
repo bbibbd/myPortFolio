@@ -45,6 +45,7 @@ class ProjectDetailPage extends StatelessWidget {
       ],
     );
   }
+
   void _showImage(BuildContext context, List<String> imageUrls, int initialIndex) {
     showDialog(
       context: context,
@@ -245,11 +246,11 @@ class ProjectDetailPage extends StatelessWidget {
               SizedBox(height: 10),
               buildDate(project),
               buildSkills(project),
-              SizedBox(height: 10),
-              buildTitleText(project),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
+              // buildTitleText(project),
+              // SizedBox(height: 10),
               buildParagraph(project.description, "\\n\\n"),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               Text(
                 "배우고 느낀점",
                 style: TextStyle(
@@ -257,7 +258,7 @@ class ProjectDetailPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               buildParagraph(project.impression, "\\n\\n"),
             ],
           ),

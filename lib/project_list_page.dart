@@ -470,6 +470,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                 impression: data['느낀점'] as String,
                 importance: data['중요도'] as String,
                 category: data['category'] as String,
+                summary: data['summary'] as String,
               );
             }).toList();
           } else if(_selectedCategory == '대표 프로젝트'){
@@ -494,6 +495,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                   impression: data['느낀점'] as String,
                   importance: data['중요도'] as String,
                   category: data['category'] as String,
+                  summary:  data['summary'] as String,
                 );
               }else {
                 return null;
@@ -528,6 +530,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                   impression: data['느낀점'] as String,
                   importance: data['중요도'] as String,
                   category: data['category'] as String,
+                  summary: data['summary'] as String
                 );
               } else {
                 return null;

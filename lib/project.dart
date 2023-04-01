@@ -9,6 +9,7 @@ class Project {
   final List<String> skills;
   final String importance;
   final String category;
+  final String summary;
 
   Project({
     required this.name,
@@ -20,7 +21,7 @@ class Project {
     required this.skills,
     required this.impression,
     required this.importance,
-    required this.category,
+    required this.category, required this.summary,
   });
 
 
