@@ -4,6 +4,7 @@ import 'package:portfolio/project.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:portfolio/utility.dart';
 
 
 class ProjectDetailPage extends StatelessWidget {
@@ -189,28 +190,7 @@ class ProjectDetailPage extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isPortrait = screenHeight > screenWidth;
 
-    double paddingValue = 12;
-    if (screenWidth > 320 && screenWidth <= 375) {
-      paddingValue = 12;
-    } else if (screenWidth > 375 && screenWidth <= 414) {
-      paddingValue = 24;
-    } else if (screenWidth > 414 && screenWidth <= 480) {
-      paddingValue = 36;
-    } else if (screenWidth > 480 && screenWidth <= 540) {
-      paddingValue = 48;
-    } else if (screenWidth > 540 && screenWidth <= 600) {
-      paddingValue = 60;
-    } else if (screenWidth > 600 && screenWidth <= 720) {
-      paddingValue = 72;
-    } else if (screenWidth > 720 && screenWidth <= 840) {
-      paddingValue = 84;
-    } else if (screenWidth > 840 && screenWidth <= 960) {
-      paddingValue = 96;
-    } else if (screenWidth > 960 && screenWidth <= 1080) {
-      paddingValue = 108;
-    } else if (screenWidth > 1080) {
-      paddingValue = 120;
-    }
+    double paddingValue = getPaddingValueOfDetailPage(screenWidth);
 
     Widget buildParagraph(String text, String delimiter) {
       final paragraphs = text.split(delimiter);

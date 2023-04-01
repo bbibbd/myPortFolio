@@ -51,7 +51,7 @@ class ProfileDetailPage extends StatelessWidget {
           final data = snapshot.data!.data() as Map<String, dynamic>;
 
           return ListView.builder(
-            itemCount: 4,
+            itemCount: 6,
             itemBuilder: (BuildContext context, int index) {
               switch (index) {
                 case 0:
@@ -66,7 +66,11 @@ class ProfileDetailPage extends StatelessWidget {
                 case 2:
                   return buildSkills(context, data);
                 case 3:
+                  return buildAwardList(context, data);
+                case 4:
                   return buildExperience(context, data);
+                case 5:
+                  return buildLabExperience(context, data);
                 default:
                   return const SizedBox.shrink();
               }
@@ -204,13 +208,7 @@ class ProfileDetailPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '자기소개',
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleLarge,
-          ),
+          buildSubtitle("자기소개"),
           const SizedBox(height: 8),
           Text(
             data['introduction'],
@@ -231,13 +229,7 @@ class ProfileDetailPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '스킬',
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleLarge,
-          ),
+          buildSubtitle('스킬'),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -258,23 +250,105 @@ class ProfileDetailPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '경력',
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleLarge,
-          ),
+          buildSubtitle('경력'),
           const SizedBox(height: 8),
           for (String experience in experiences) ...[
-            Text(
-              "- $experience",
-              style: Theme.of(context).textTheme.titleMedium,
+            Row(
+              children: [
+                SizedBox(width: 10,),
+                Text(
+                  "• ",
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Expanded(
+                  child: Text(
+                    experience,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 4),
           ],
         ],
       ),
     );
+  }
+
+
+  Widget buildLabExperience(BuildContext context, Map<String, dynamic> data) {
+    List<String> experiences = List<String>.from(data['조교활동']);
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          buildSubtitle('조교활동'),
+          const SizedBox(height: 8),
+          for (String experience in experiences) ...[
+            Row(
+              children: [
+                SizedBox(width: 10,),
+                Text(
+                  "• ",
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Expanded(
+                  child: Text(
+                    experience,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+          ],
+        ],
+      ),
+    );
+  }
+
+
+  Widget buildAwardList(BuildContext context, Map<String, dynamic> data) {
+    List<String> experiences = List<String>.from(data['수상내역']);
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          buildSubtitle('주요성과'),
+          const SizedBox(height: 8),
+          for (String experience in experiences) ...[
+            Row(
+              children: [
+                SizedBox(width: 10,),
+                Text(
+                  "• ",
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Expanded(
+                  child: Text(
+                    experience,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Text buildSubtitle(String string) {
+    return  Text(
+        string,
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        )
+    );
+
   }
 }
