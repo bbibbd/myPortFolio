@@ -207,8 +207,8 @@ class ProfileDetailPage extends StatelessWidget {
           Text(
             data['introduction'],
             style: TextStyle(
-              fontSize: 20,
-              height: 1.7,
+              fontSize: 17,
+              height: 1.5,
             )
           ),
         ],
@@ -229,7 +229,7 @@ class ProfileDetailPage extends StatelessWidget {
             spacing: 8,
             runSpacing: 8,
             children: [
-              for (String skill in skills) Chip(label: Text(skill)),
+              for (String skill in skills) Chip(label: Text(skill, style: TextStyle(fontSize: 15),)),
             ],
           ),
         ],
@@ -255,7 +255,7 @@ class ProfileDetailPage extends StatelessWidget {
                 Text(
                   "• ",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -263,7 +263,7 @@ class ProfileDetailPage extends StatelessWidget {
                   child: Text(
                     experience,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 17,
                       height: 1.4,
                     )
                   ),
@@ -295,7 +295,7 @@ class ProfileDetailPage extends StatelessWidget {
                 Text(
                   "• ",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                   )
                 ),
@@ -303,7 +303,7 @@ class ProfileDetailPage extends StatelessWidget {
                   child: Text(
                     experience,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 17,
                       height: 1.4,
                     ),
                   ),
@@ -336,14 +336,14 @@ class ProfileDetailPage extends StatelessWidget {
                   "• ",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 17,
                   )
                 ),
                 Expanded(
                   child: Text(
                     experience,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 17,
                       height: 1.4,
                     ),
                   ),
@@ -360,7 +360,7 @@ class ProfileDetailPage extends StatelessWidget {
   Text buildSubtitle(String string) {
     return Text(string,
         style: TextStyle(
-          fontSize: 30,
+          fontSize: 25,
           fontWeight: FontWeight.bold,
         ));
   }
@@ -470,14 +470,14 @@ class ProfileDetailPage extends StatelessWidget {
                           Text(
                             "• ",
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 17,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
                             '${DateFormat('yyyy.MM').format(project.startDate)} ~ ${DateFormat('yyyy.MM').format(project.endDate)}: ',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 17,
                               height: 1.4,
                             )
                           ),
@@ -491,7 +491,7 @@ class ProfileDetailPage extends StatelessWidget {
                                 child: Text(
                                   '[${project.category}] ${project.name}',
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 17,
                                     height: 1.4,
                                   ),
                                 ),
