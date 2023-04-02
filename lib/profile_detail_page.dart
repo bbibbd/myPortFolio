@@ -12,7 +12,7 @@ class ProfileDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile Detail'),
+        title: const Text('프로필'),
       ),
       body: OrientationBuilder(
         builder: (BuildContext context, Orientation orientation) {
@@ -207,7 +207,7 @@ class ProfileDetailPage extends StatelessWidget {
           Text(
             data['introduction'],
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 20,
               height: 1.7,
             )
           ),
@@ -254,13 +254,17 @@ class ProfileDetailPage extends StatelessWidget {
                 ),
                 Text(
                   "• ",
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Expanded(
                   child: Text(
                     experience,
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 20,
+                      height: 1.4,
                     )
                   ),
                 ),
@@ -290,13 +294,17 @@ class ProfileDetailPage extends StatelessWidget {
                 ),
                 Text(
                   "• ",
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  )
                 ),
                 Expanded(
                   child: Text(
                     experience,
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 20,
+                      height: 1.4,
                     ),
                   ),
                 ),
@@ -326,13 +334,17 @@ class ProfileDetailPage extends StatelessWidget {
                 ),
                 Text(
                   "• ",
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  )
                 ),
                 Expanded(
                   child: Text(
                     experience,
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 20,
+                      height: 1.4,
                     ),
                   ),
                 ),
@@ -348,7 +360,7 @@ class ProfileDetailPage extends StatelessWidget {
   Text buildSubtitle(String string) {
     return Text(string,
         style: TextStyle(
-          fontSize: 24,
+          fontSize: 30,
           fontWeight: FontWeight.bold,
         ));
   }
@@ -459,12 +471,14 @@ class ProfileDetailPage extends StatelessWidget {
                             "• ",
                             style: TextStyle(
                               fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
                             '${DateFormat('yyyy.MM').format(project.startDate)} ~ ${DateFormat('yyyy.MM').format(project.endDate)}: ',
                             style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 20,
+                              height: 1.4,
                             )
                           ),
                           Expanded(
@@ -477,9 +491,8 @@ class ProfileDetailPage extends StatelessWidget {
                                 child: Text(
                                   '[${project.category}] ${project.name}',
                                   style: TextStyle(
-                                    color: Colors.blueAccent,
-                                    decoration: TextDecoration.underline,
-                                    fontSize: 17,
+                                    fontSize: 20,
+                                    height: 1.4,
                                   ),
                                 ),
                               ),

@@ -24,6 +24,56 @@ class _ProjectListPageState extends State<ProjectListPage> {
   String _password = '';
   String _selectedCategory = '전체';
 
+  Widget buildProjectSummary(List<String> summary) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.circle_outlined,
+              color: Colors.grey,
+              size: 12,
+            ),
+            SizedBox(width: 4),
+            Expanded(child: Text(
+              summary[0],
+              style: TextStyle(
+                height: 1.5,
+                fontSize: 15,
+                color: Colors.grey,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),)
+          ],
+        ),
+        Row(
+          children: [
+            Icon(
+              Icons.circle_outlined,
+              color: Colors.grey,
+              size: 12,
+            ),
+            SizedBox(width: 4),
+            Expanded(
+              child:Text(
+                summary[4],
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget buildSortDropdown() {
     return DropdownButton<String>(
       value: _sortCriteria,
@@ -276,7 +326,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(16,),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -295,21 +345,12 @@ class _ProjectListPageState extends State<ProjectListPage> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
+                                fontSize: 15,
                                 color: Colors.grey,
                               ),
                             ),
                             SizedBox(height: 8),
-                            isWideScreen
-                                ? Text(
-                              project.description,
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            )
-                                : Text(
-                              project.description,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            buildProjectSummary(project.summary),
                             SizedBox(height: 8),
                             buildDate(project),
                             SizedBox(height: 8),
@@ -506,7 +547,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
                 .cast<
                 Project>(); // Add this line to cast the list to List<Project>
           }
-
             return buildListView(projects);
         },
       ),
@@ -515,7 +555,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Text('My Portfolio'),
+      title: Text('프로젝트 목록'),
       leading: null,
       // leading: Builder(
       //   builder: (BuildContext context) {
@@ -603,22 +643,14 @@ class _ProjectListPageState extends State<ProjectListPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-              left: paddingValue, right: paddingValue, top: 16.0, bottom: 16.0),
+              left: paddingValue, right: paddingValue, top: 16.0,),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //buildProfileWidget(),
-              SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Expanded(child: Text(
-                    '프로젝트 목록',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    )
-                  ),),
                   Text(
                     '카테고리',
                     style: TextStyle(
