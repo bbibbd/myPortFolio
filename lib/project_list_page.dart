@@ -248,7 +248,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         final screenWidth = constraints.maxWidth;
-        final isWideScreen = screenWidth >= 600;
+        final isWideScreen = screenWidth >= 960;
 
         return ListView.builder(
           itemCount: projects.length,
@@ -415,6 +415,9 @@ class _ProjectListPageState extends State<ProjectListPage> {
               final List<String> skills = (data['주요기술'] as List<dynamic>)
                   .map((url) => url as String)
                   .toList();
+              final List<String> summary = (data['summary'] as List<dynamic>)
+                  .map((skill) => skill as String)
+                  .toList();
 
               return Project(
                 name: data['projectName'] as String,
@@ -427,7 +430,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                 impression: data['느낀점'] as String,
                 importance: data['중요도'] as String,
                 category: data['category'] as String,
-                summary: data['summary'] as String,
+                summary: summary,
               );
             }).toList();
           } else if(_selectedCategory == '대표 프로젝트'){
@@ -439,6 +442,9 @@ class _ProjectListPageState extends State<ProjectListPage> {
                   .toList();
               final List<String> skills = (data['주요기술'] as List<dynamic>)
                   .map((url) => url as String)
+                  .toList();
+              final List<String> summary = (data['summary'] as List<dynamic>)
+                  .map((skill) => skill as String)
                   .toList();
               if (data['대표'] == true){
                 return Project(
@@ -452,7 +458,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                   impression: data['느낀점'] as String,
                   importance: data['중요도'] as String,
                   category: data['category'] as String,
-                  summary:  data['summary'] as String,
+                  summary:  summary,
                 );
               }else {
                 return null;
@@ -474,7 +480,9 @@ class _ProjectListPageState extends State<ProjectListPage> {
               final List<String> skills = (data['주요기술'] as List<dynamic>)
                   .map((url) => url as String)
                   .toList();
-
+              final List<String> summary = (data['summary'] as List<dynamic>)
+                  .map((skill) => skill as String)
+                  .toList();
               if (data['category'] == _selectedCategory) {
                 return Project(
                   name: data['projectName'] as String,
@@ -487,7 +495,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                   impression: data['느낀점'] as String,
                   importance: data['중요도'] as String,
                   category: data['category'] as String,
-                  summary: data['summary'] as String
+                  summary: summary,
                 );
               } else {
                 return null;
@@ -591,7 +599,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
     return Scaffold(
       appBar: buildAppBar(),
-      drawer: buildDrawer(context),
+      //drawer: buildDrawer(context),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
@@ -599,8 +607,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildProfileWidget(),
-              SizedBox(height: 16),
+              //buildProfileWidget(),
+              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -193,6 +193,33 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     }
   }
 
+  Widget buildParagraph(String text, String delimiter) {
+    final paragraphs = text.split(delimiter);
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var paragraph in paragraphs)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    paragraph.trim(),
+                    style: TextStyle(fontSize: 20, height: 1.6),
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final Project project =
@@ -204,56 +231,53 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
 
     double paddingValue = getPaddingValueOfDetailPage(screenWidth);
 
-    Widget buildParagraph(String text, String delimiter) {
-      final paragraphs = text.split(delimiter);
-      final widgets = <Widget>[];
 
-      for (int i = 0; i < paragraphs.length; i++) {
-        final paragraph = paragraphs[i];
-        widgets.add(Text(
-          paragraph.trim(),
-          style: TextStyle(fontSize: 20, height: 1.6),
-        ));
 
-        if (i != paragraphs.length - 1) {
-          widgets.add(SizedBox(height: 16));
-        }
-      }
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: widgets,
-      );
-    }
-
-    Widget buildBulletParagraph(String text, String delimiter) {
-      final paragraphs = text.split(delimiter);
-      final widgets = paragraphs.map((paragraph) => Text(
-        paragraph.trim(),
-        style: TextStyle(fontSize: 20, height: 1.5),
-      )).toList();
+    Widget buildBulletParagraph(List<String> texts) {
+      final titles = [    "프로젝트 목표",    "사용한 기술",    "문제점 및 어려운점",    "해결 방안",    "결과",    "배우고 느낀점",  ];
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (var widget in widgets)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("• "),
-                    Expanded(child: widget),
+          for (int i = 0; i < titles.length; i++)
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                      offset: Offset(0, 2),
+                    ),
                   ],
                 ),
-                SizedBox(height: 10),
-              ],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${titles[i]}",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      texts[i].trim(),
+                      style: TextStyle(fontSize: 20, height: 1.5),
+                    ),
+                  ],
+                ),
+              ),
             ),
         ],
       );
     }
-
 
     return Scaffold(
       appBar: AppBar(
@@ -326,12 +350,20 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
               ),
               SizedBox(height: 10),
               _isSummary
-                  ? buildBulletParagraph(project.summary, "\\n\\n")
-                  : Column(
+                  ? buildBulletParagraph(project.summary)
+                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(height: 16),
+                        Text(
+                          "프로젝트 내용",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 16),
                         buildParagraph(project.description, "\\n\\n"),
-                        SizedBox(height: 20),
                         Text(
                           "배우고 느낀점",
                           style: TextStyle(
@@ -339,7 +371,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 16),
                         buildParagraph(project.impression, "\\n\\n"),
                       ],
                     ),

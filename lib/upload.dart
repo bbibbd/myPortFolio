@@ -43,7 +43,9 @@ class _UploadPageState extends State<UploadPage> {
         impression: _feelingController.text,
         importance: _importanceController.text,
         category:  _categoryController.text,
-        summary:  _summaryController.text,
+        summary:  _summaryController.text.split(',')
+            .map((skill) => skill.trim())
+            .toList(),
       );
 
       try {
@@ -223,7 +225,7 @@ class _UploadPageState extends State<UploadPage> {
                       TextFormField(
                         controller: _summaryController,
                         decoration: InputDecoration(
-                          labelText: 'sumamry',
+                          labelText: 'comma-seperated summary',
                         ),
                       ),
                     ],

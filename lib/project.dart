@@ -9,7 +9,7 @@ class Project {
   final List<String> skills;
   final String importance;
   final String category;
-  final String summary;
+  final List<String> summary;
 
   Project({
     required this.name,

@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushNamed(
                       context,
-                      '/projectList',
+                      '/profileDetail',
                       arguments: {'title': 'My Projects'},
                     );
                   },
@@ -49,8 +49,7 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(fontSize: 18.0),
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    onPrimary: Colors.black,
+                    foregroundColor: Colors.black, backgroundColor: Colors.white,
                     padding: EdgeInsets.symmetric(
                       horizontal: 32.0,
                       vertical: 16.0,

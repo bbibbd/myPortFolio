@@ -376,7 +376,22 @@ class ProfileDetailPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildSubtitle("프로젝트 연혁"),
+          Row(
+            children: [
+              Expanded(child: buildSubtitle("프로젝트 연혁"),),
+              TextButton(
+                  onPressed: (){
+                    Navigator.pushNamed(context, '/projectList');
+              },
+                  child: Text(
+                      "전체보기",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+            ],
+          ),
           SizedBox(height: 8),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
@@ -404,6 +419,9 @@ class ProfileDetailPage extends StatelessWidget {
                 final List<String> skills = (data['주요기술'] as List<dynamic>)
                     .map((skill) => skill as String)
                     .toList();
+                final List<String> summary = (data['summary'] as List<dynamic>)
+                    .map((skill) => skill as String)
+                    .toList();
                 final bool isCurrent = data['endDate'] == null;
 
                 return Project(
@@ -418,7 +436,7 @@ class ProfileDetailPage extends StatelessWidget {
                     skills: skills,
                     importance: data['중요도'] as String,
                     category: data['category'] as String,
-                    summary: data['summary'] as String,
+                    summary: summary,
                     impression: data['느낀점'] as String);
 
               }).toList();
