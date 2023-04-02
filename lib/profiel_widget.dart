@@ -18,6 +18,7 @@ class ProfileWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Hero(
               tag: 'profileImage',
@@ -48,14 +49,16 @@ class ProfileWidget extends StatelessWidget {
                 ],
               ),
             ),
-            IconButton(
+            TextButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/profileDetail');
               },
-              icon: Icon(
-                Icons.arrow_forward_ios_sharp,
-                color: Theme.of(context).primaryColor,
-                size: 24.0,
+              child: Text(
+                '더보기',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                ),
               ),
             ),
           ],

@@ -19,7 +19,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
   @override
   void initState() {
     super.initState();
-    _isSummary = false; // 초기값 설정
+    _isSummary = true; // 초기값 설정
   }
 
   Widget buildDate(Project project) {
@@ -134,7 +134,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                 ))
             .toList(),
         options: CarouselOptions(
-          height: isPortrait ? 200 : screenHeight * 0.38,
+          height: isPortrait ? 200 : screenHeight * 0.30,
           aspectRatio: 16 / 9,
           viewportFraction: 0.5,
           initialPage: 0,
@@ -212,10 +212,11 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
         final paragraph = paragraphs[i];
         widgets.add(Text(
           paragraph.trim(),
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 20, height: 1.6),
         ));
+
         if (i != paragraphs.length - 1) {
-          widgets.add(SizedBox(height: 10));
+          widgets.add(SizedBox(height: 16));
         }
       }
 
@@ -224,6 +225,35 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
         children: widgets,
       );
     }
+
+    Widget buildBulletParagraph(String text, String delimiter) {
+      final paragraphs = text.split(delimiter);
+      final widgets = paragraphs.map((paragraph) => Text(
+        paragraph.trim(),
+        style: TextStyle(fontSize: 20, height: 1.5),
+      )).toList();
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (var widget in widgets)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("• "),
+                    Expanded(child: widget),
+                  ],
+                ),
+                SizedBox(height: 10),
+              ],
+            ),
+        ],
+      );
+    }
+
 
     return Scaffold(
       appBar: AppBar(
@@ -264,31 +294,39 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        _isSummary = false;
+                        _isSummary = true;
                       });
                     },
-                    child: Text('전체'),
+                    child: Text('요약'),
                     style: ElevatedButton.styleFrom(
-                      primary: _isSummary ? Colors.grey : null,
+                      backgroundColor: !_isSummary ? Colors.grey : null,
                     ),
                   ),
                   SizedBox(width: 10,),
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        _isSummary = true;
+                        _isSummary = false;
                       });
                     },
-                    child: Text('요약'),
+                    child: Text('자세히'),
                     style: ElevatedButton.styleFrom(
-                      primary: !_isSummary ? Colors.grey : null,
+                      backgroundColor: _isSummary ? Colors.grey : null,
                     ),
                   ),
+                  SizedBox(width: 10,),
+                  Expanded(child: Text(
+                    "프로젝트 상세 정보를 보시려면 '자세히'를 클릭해주세요.",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey,
+                    ),
+                  ),)
                 ],
               ),
               SizedBox(height: 10),
               _isSummary
-                  ? buildParagraph(project.summary, "\\n\\n")
+                  ? buildBulletParagraph(project.summary, "\\n\\n")
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -302,7 +340,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                           ),
                         ),
                         SizedBox(height: 20),
-                        buildParagraph(project.impression, "\n\n"),
+                        buildParagraph(project.impression, "\\n\\n"),
                       ],
                     ),
             ],

@@ -566,7 +566,7 @@ packages:
     source: hosted
     version: "2.1.2"
   url_launcher_web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: url_launcher_web
       sha256: "81fe91b6c4f84f222d186a9d23c73157dc4c8e1c71489c4d08be1ad3b228f1aa"

@@ -103,94 +103,94 @@ class _ProjectListPageState extends State<ProjectListPage> {
                 color: Theme.of(context).primaryColor,
               ),
             ),
-            ListTile(
-              title: Text('GitHub', style: TextStyle(fontSize: 16.0)),
-              leading: Icon(Icons.code),
-              onTap: () {
-                _launchUrl(_github);
-              },
-            ),
-            ListTile(
-              title: Text('Instagram', style: TextStyle(fontSize: 16.0)),
-              leading: Icon(Icons.chat),
-              onTap: () {
-                _launchUrl(_instagram);
-              },
-            ),
-            ListTile(
-              title: Text('Tistory', style: TextStyle(fontSize: 16.0)),
-              leading: Icon(Icons.chat),
-              onTap: () {
-                _launchUrl(_tistory);
-              },
-            ),
-            ListTile(
-              title: Text('Kakao', style: TextStyle(fontSize: 16.0)),
-              leading: Icon(Icons.chat),
-              onTap: () {
-                _launchUrl(_kakaotalk);
-              },
-            ),
-            ListTile(
-              title: Text('글쓰기', style: TextStyle(fontSize: 16.0)),
-              leading: Icon(Icons.edit),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('암호 입력'),
-                      content: TextFormField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: '암호를 입력하세요.',
-                        ),
-                        onChanged: (value) {
-                          _password = value;
-                        },
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text('취소'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        TextButton(
-                          child: Text('확인'),
-                          onPressed: () {
-                            if (_password == 'dslove1109') {
-                              // 암호가 맞는 경우
-                              Navigator.pushNamed(context, '/upload');
-                            } else {
-                              // 암호가 틀린 경우
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('암호가 틀렸습니다.'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: Text('확인'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            }
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
-            Divider(),
-            SizedBox(height: MediaQuery.of(context).size.height / 2),
+            // ListTile(
+            //   title: Text('GitHub', style: TextStyle(fontSize: 16.0)),
+            //   leading: Icon(Icons.code),
+            //   onTap: () {
+            //     _launchUrl(_github);
+            //   },
+            // ),
+            // ListTile(
+            //   title: Text('Instagram', style: TextStyle(fontSize: 16.0)),
+            //   leading: Icon(Icons.chat),
+            //   onTap: () {
+            //     _launchUrl(_instagram);
+            //   },
+            // ),
+            // ListTile(
+            //   title: Text('Tistory', style: TextStyle(fontSize: 16.0)),
+            //   leading: Icon(Icons.chat),
+            //   onTap: () {
+            //     _launchUrl(_tistory);
+            //   },
+            // ),
+            // ListTile(
+            //   title: Text('Kakao', style: TextStyle(fontSize: 16.0)),
+            //   leading: Icon(Icons.chat),
+            //   onTap: () {
+            //     _launchUrl(_kakaotalk);
+            //   },
+            // ),
+            // ListTile(
+            //   title: Text('글쓰기', style: TextStyle(fontSize: 16.0)),
+            //   leading: Icon(Icons.edit),
+            //   onTap: () {
+            //     showDialog(
+            //       context: context,
+            //       builder: (BuildContext context) {
+            //         return AlertDialog(
+            //           title: Text('암호 입력'),
+            //           content: TextFormField(
+            //             obscureText: true,
+            //             decoration: InputDecoration(
+            //               hintText: '암호를 입력하세요.',
+            //             ),
+            //             onChanged: (value) {
+            //               _password = value;
+            //             },
+            //           ),
+            //           actions: <Widget>[
+            //             TextButton(
+            //               child: Text('취소'),
+            //               onPressed: () {
+            //                 Navigator.of(context).pop();
+            //               },
+            //             ),
+            //             TextButton(
+            //               child: Text('확인'),
+            //               onPressed: () {
+            //                 if (_password == 'dslove1109') {
+            //                   // 암호가 맞는 경우
+            //                   Navigator.pushNamed(context, '/upload');
+            //                 } else {
+            //                   // 암호가 틀린 경우
+            //                   showDialog(
+            //                     context: context,
+            //                     builder: (BuildContext context) {
+            //                       return AlertDialog(
+            //                         title: Text('암호가 틀렸습니다.'),
+            //                         actions: <Widget>[
+            //                           TextButton(
+            //                             child: Text('확인'),
+            //                             onPressed: () {
+            //                               Navigator.of(context).pop();
+            //                             },
+            //                           ),
+            //                         ],
+            //                       );
+            //                     },
+            //                   );
+            //                 }
+            //               },
+            //             ),
+            //           ],
+            //         );
+            //       },
+            //     );
+            //   },
+            // ),
+            // Divider(),
+            SizedBox(height: 10,),
             ListTile(
               title: Text('Contact', style: TextStyle(fontSize: 16.0)),
               leading: Icon(Icons.contact_mail),
@@ -212,188 +212,145 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
   Widget buildDate(Project project) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Expanded(
-          child: Row(
-            children: [
-              Icon(
-                Icons.calendar_today,
-                color: Colors.grey,
-                size: 12,
-              ),
-              SizedBox(width: 4),
-              Flexible(
-                child: Text(
-                  'Start: ${DateFormat('yyyy. MM. dd').format(project.startDate)}',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ],
+        Icon(
+          Icons.calendar_today,
+          color: Colors.grey,
+          size: 12,
+        ),
+        SizedBox(width: 4),
+        Text(
+          'Start: ${DateFormat('yyyy. MM. dd').format(project.startDate)}',
+          style: TextStyle(
+            fontSize: 10,
+            color: Colors.grey,
           ),
         ),
-        SizedBox(width: 16),
-        Expanded(
-          child: Row(
-            children: [
-              Icon(
-                Icons.calendar_today,
-                color: Colors.grey,
-                size: 12,
-              ),
-              SizedBox(width: 4),
-              Flexible(
-                child: Text(
-                  'End: ${DateFormat('yyyy. MM. dd').format(project.endDate)}',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ],
+        SizedBox(width: 4),
+        Icon(
+          Icons.calendar_today,
+          color: Colors.grey,
+          size: 12,
+        ),
+        SizedBox(width: 4),
+        Text(
+          'End: ${DateFormat('yyyy. MM. dd').format(project.endDate)}',
+          style: TextStyle(
+            fontSize: 10,
+            color: Colors.grey,
           ),
         ),
       ],
     );
   }
 
-  Widget buildGridView(List<Project> projects) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    int crossAxisCount = screenWidth ~/ 300; // 300은 각 열의 최소 너비
-
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        childAspectRatio: 3 / 4,
-        mainAxisSpacing: 16,
-        crossAxisSpacing: 16,
-      ),
-      itemCount: projects.length,
-      itemBuilder: (context, index) {
-        final project = projects[index];
-        return InkWell(
-          onTap: () {
-            Navigator.pushNamed(context, '/projectDetail', arguments: project);
-          },
-          child: Card(
-            elevation: 2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(project.imageUrl),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        project.name,
-                        style: Theme.of(context).textTheme.headline6,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        project.category,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      SizedBox(height: 8,),
-                      Text(
-                        project.description,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 8),
-                      buildDate(project),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   Widget buildListView(List<Project> projects) {
-    return ListView.builder(
-      itemCount: projects.length,
-      itemBuilder: (context, index) {
-        final project = projects[index];
-        return InkWell(
-          onTap: () {
-            Navigator.pushNamed(context, '/projectDetail', arguments: project);
-          },
-          child: Card(
-            elevation: 2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  height: 150,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(project.imageUrl),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        project.name,
-                        style: Theme.of(context).textTheme.headline6,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        project.category,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.grey,
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final screenWidth = constraints.maxWidth;
+        final isWideScreen = screenWidth >= 600;
+
+        return ListView.builder(
+          itemCount: projects.length,
+          itemBuilder: (context, index) {
+            final project = projects[index];
+            return InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/projectDetail', arguments: project);
+              },
+              child: Card(
+                elevation: 2,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: isWideScreen ? screenWidth * 0.3 : screenWidth * 0.4,
+                      height: 180,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(project.imageUrl),
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      SizedBox(height: 8),
-                      Text(
-                        project.description,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              project.name,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              project.category,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            isWideScreen
+                                ? Text(
+                              project.description,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            )
+                                : Text(
+                              project.description,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: 8),
+                            buildDate(project),
+                            SizedBox(height: 8),
+                            Wrap(
+                              spacing: 4,
+                              children: project.skills
+                                  .take(3)
+                                  .map((skill) => Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(7),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: Text(
+                                    "# $skill",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ))
+                                  .toList(),
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: 8),
-                      buildDate(project),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
   }
+
+
+
 
   String orderBy(String order) {
     if (order == "시작일") {
@@ -542,11 +499,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                 Project>(); // Add this line to cast the list to List<Project>
           }
 
-            if (_isLandScape) {
-            return buildGridView(projects);
-          } else {
             return buildListView(projects);
-          }
         },
       ),
     );
@@ -649,12 +602,22 @@ class _ProjectListPageState extends State<ProjectListPage> {
               buildProfileWidget(),
               SizedBox(height: 16),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Expanded(child: Text(
+                    '프로젝트 목록',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    )
+                  ),),
                   Text(
-                    'Projects',
-                    style: Theme.of(context).textTheme.headline6,
+                    '카테고리',
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
                   ),
+                  SizedBox(width: 10,),
                   buildCategoryDropdown(),
                 ],
               ),

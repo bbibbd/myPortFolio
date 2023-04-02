@@ -206,7 +206,10 @@ class ProfileDetailPage extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             data['introduction'],
-            style: Theme.of(context).textTheme.titleMedium,
+            style: TextStyle(
+              fontSize: 17,
+              height: 1.7,
+            )
           ),
         ],
       ),
@@ -256,7 +259,9 @@ class ProfileDetailPage extends StatelessWidget {
                 Expanded(
                   child: Text(
                     experience,
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: TextStyle(
+                      fontSize: 17,
+                    )
                   ),
                 ),
               ],
@@ -290,7 +295,9 @@ class ProfileDetailPage extends StatelessWidget {
                 Expanded(
                   child: Text(
                     experience,
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: TextStyle(
+                      fontSize: 17,
+                    ),
                   ),
                 ),
               ],
@@ -324,7 +331,9 @@ class ProfileDetailPage extends StatelessWidget {
                 Expanded(
                   child: Text(
                     experience,
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: TextStyle(
+                      fontSize: 17,
+                    ),
                   ),
                 ),
               ],
@@ -339,7 +348,7 @@ class ProfileDetailPage extends StatelessWidget {
   Text buildSubtitle(String string) {
     return Text(string,
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 24,
           fontWeight: FontWeight.bold,
         ));
   }
@@ -430,11 +439,15 @@ class ProfileDetailPage extends StatelessWidget {
                           ),
                           Text(
                             "• ",
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
                           ),
                           Text(
                             '${DateFormat('yyyy.MM').format(project.startDate)} ~ ${DateFormat('yyyy.MM').format(project.endDate)}: ',
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: TextStyle(
+                              fontSize: 17,
+                            )
                           ),
                           Expanded(
                             child: TextButton(
@@ -448,6 +461,7 @@ class ProfileDetailPage extends StatelessWidget {
                                   style: TextStyle(
                                     color: Colors.blueAccent,
                                     decoration: TextDecoration.underline,
+                                    fontSize: 17,
                                   ),
                                 ),
                               ),
