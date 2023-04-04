@@ -422,7 +422,7 @@ class ProfileDetailPage extends StatelessWidget {
                 );
               }
 
-              final projects = snapshot.data!.docs.where((doc) => doc.get('category') != '대외 활동').map((doc) {
+              final projects = snapshot.data!.docs.where((doc) => doc.get('category')[0] != '대외 활동').map((doc) {
                 final data = doc.data() as Map<String, dynamic>;
                 final List<String> imageUrls =
                 (data['imageUrls'] as List<dynamic>)
@@ -436,7 +436,7 @@ class ProfileDetailPage extends StatelessWidget {
                     .toList();
                 final bool isCurrent = data['endDate'] == null;
 
-                final List<String> category = (data['categpry'] as List<dynamic>)
+                final List<String> category = (data['category'] as List<dynamic>)
                 .map((skill) => skill as String)
                 .toList();
 
@@ -493,7 +493,7 @@ class ProfileDetailPage extends StatelessWidget {
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  '[${project.category}] ${project.name}',
+                                  '[${project.category[0]}] ${project.name}',
                                   style: TextStyle(
                                     fontSize: 20,
                                     height: 1.4,
