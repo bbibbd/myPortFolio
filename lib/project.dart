@@ -8,7 +8,7 @@ class Project {
   final List<String> imageUrls;
   final List<String> skills;
   final String importance;
-  final String category;
+  final List<String> category;
   final List<String> summary;
 
   Project({

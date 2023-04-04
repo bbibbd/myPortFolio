@@ -42,7 +42,7 @@ class _UploadPageState extends State<UploadPage> {
             .toList(),
         impression: _feelingController.text,
         importance: _importanceController.text,
-        category:  _categoryController.text,
+        category:  _categoryController.text.split(','),
         summary:  _summaryController.text.split(',')
             .map((skill) => skill.trim())
             .toList(),

@@ -255,7 +255,7 @@ class ProfileDetailPage extends StatelessWidget {
                 Text(
                   "• ",
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -263,7 +263,7 @@ class ProfileDetailPage extends StatelessWidget {
                   child: Text(
                     experience,
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 20,
                       height: 1.4,
                     )
                   ),
@@ -295,7 +295,7 @@ class ProfileDetailPage extends StatelessWidget {
                 Text(
                   "• ",
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   )
                 ),
@@ -303,7 +303,7 @@ class ProfileDetailPage extends StatelessWidget {
                   child: Text(
                     experience,
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 20,
                       height: 1.4,
                     ),
                   ),
@@ -336,14 +336,14 @@ class ProfileDetailPage extends StatelessWidget {
                   "• ",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 17,
+                    fontSize: 20,
                   )
                 ),
                 Expanded(
                   child: Text(
                     experience,
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 20,
                       height: 1.4,
                     ),
                   ),
@@ -390,7 +390,7 @@ class ProfileDetailPage extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: buildSubtitle("프로젝트 연혁"),),
+              Expanded(child: buildSubtitle("프로젝트 경력"),),
               TextButton(
                   onPressed: (){
                     Navigator.pushNamed(context, '/projectList');
@@ -422,7 +422,7 @@ class ProfileDetailPage extends StatelessWidget {
                 );
               }
 
-              final projects = snapshot.data!.docs.map((doc) {
+              final projects = snapshot.data!.docs.where((doc) => doc.get('category') != '대외 활동').map((doc) {
                 final data = doc.data() as Map<String, dynamic>;
                 final List<String> imageUrls =
                 (data['imageUrls'] as List<dynamic>)
@@ -436,6 +436,10 @@ class ProfileDetailPage extends StatelessWidget {
                     .toList();
                 final bool isCurrent = data['endDate'] == null;
 
+                final List<String> category = (data['categpry'] as List<dynamic>)
+                .map((skill) => skill as String)
+                .toList();
+
                 return Project(
                     name: data['projectName'] as String,
                     description: data['description'] as String,
@@ -447,7 +451,7 @@ class ProfileDetailPage extends StatelessWidget {
                     imageUrls: imageUrls,
                     skills: skills,
                     importance: data['중요도'] as String,
-                    category: data['category'] as String,
+                    category: category,
                     summary: summary,
                     impression: data['느낀점'] as String);
 
@@ -470,14 +474,14 @@ class ProfileDetailPage extends StatelessWidget {
                           Text(
                             "• ",
                             style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
                             '${DateFormat('yyyy.MM').format(project.startDate)} ~ ${DateFormat('yyyy.MM').format(project.endDate)}: ',
                             style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 20,
                               height: 1.4,
                             )
                           ),
@@ -491,7 +495,7 @@ class ProfileDetailPage extends StatelessWidget {
                                 child: Text(
                                   '[${project.category}] ${project.name}',
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 20,
                                     height: 1.4,
                                   ),
                                 ),

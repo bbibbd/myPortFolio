@@ -36,16 +36,18 @@ class _ProjectListPageState extends State<ProjectListPage> {
               size: 12,
             ),
             SizedBox(width: 4),
-            Expanded(child: Text(
-              summary[0],
-              style: TextStyle(
-                height: 1.5,
-                fontSize: 15,
-                color: Colors.grey,
+            Expanded(
+              child: Text(
+                summary[0],
+                style: TextStyle(
+                  height: 1.5,
+                  fontSize: 15,
+                  color: Colors.grey,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),)
+            )
           ],
         ),
         Row(
@@ -57,7 +59,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
             ),
             SizedBox(width: 4),
             Expanded(
-              child:Text(
+              child: Text(
                 summary[4],
                 style: TextStyle(
                   fontSize: 15,
@@ -67,7 +69,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-
           ],
         ),
       ],
@@ -100,7 +101,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
           _selectedCategory = value!;
         });
       },
-      items: <String>['전체', '대표 프로젝트', '졸업 연구', '산학 연구', '수업 프로젝트', '학회 활동', '대외 활동']
+      items: <String>['전체', '대표 프로젝트', '자율주행', '임베디드', 'IoT', '딥러닝', 'SLAM', '기타']
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -117,7 +118,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
   void _checkOrientation() {
     final mediaQuery = MediaQuery.of(context);
-    if (mediaQuery.orientation == Orientation.landscape) {
+    if (mediaQuery.size.width > 730) {
       setState(() {
         _isLandScape = true;
       });
@@ -240,7 +241,9 @@ class _ProjectListPageState extends State<ProjectListPage> {
             //   },
             // ),
             // Divider(),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             ListTile(
               title: Text('Contact', style: TextStyle(fontSize: 16.0)),
               leading: Icon(Icons.contact_mail),
@@ -294,6 +297,101 @@ class _ProjectListPageState extends State<ProjectListPage> {
     );
   }
 
+  Widget buildNarrowListView(List<Project> projects) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final screenWidth = constraints.maxWidth;
+        final isWideScreen = screenWidth >= 960;
+        return ListView.builder(
+          itemCount: projects.length,
+          itemBuilder: (context, index) {
+            final project = projects[index];
+            return InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/projectDetail',
+                    arguments: project);
+              },
+              child: Card(
+                elevation: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: isWideScreen ? 350 : 180,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(project.imageUrl),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(
+                        16,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            project.name,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            project.category[0],
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          buildProjectSummary(project.summary),
+                          SizedBox(height: 8),
+                          buildDate(project),
+                          SizedBox(height: 8),
+                          Wrap(
+                            spacing: 4,
+                            children: project.skills
+                                .take(3)
+                                .map((skill) => Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.4),
+                                        borderRadius: BorderRadius.circular(7),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
+                                        child: Text(
+                                          "# $skill",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Widget buildListView(List<Project> projects) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -306,7 +404,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
             final project = projects[index];
             return InkWell(
               onTap: () {
-                Navigator.pushNamed(context, '/projectDetail', arguments: project);
+                Navigator.pushNamed(context, '/projectDetail',
+                    arguments: project);
               },
               child: Card(
                 elevation: 2,
@@ -315,7 +414,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: isWideScreen ? screenWidth * 0.3 : screenWidth * 0.4,
+                      width: screenWidth * 0.3,
                       height: 180,
                       decoration: BoxDecoration(
                         image: DecorationImage(
@@ -326,7 +425,9 @@ class _ProjectListPageState extends State<ProjectListPage> {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(16,),
+                        padding: const EdgeInsets.all(
+                          16,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -341,7 +442,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              project.category,
+                              project.category[0],
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -359,21 +460,22 @@ class _ProjectListPageState extends State<ProjectListPage> {
                               children: project.skills
                                   .take(3)
                                   .map((skill) => Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.4),
-                                  borderRadius: BorderRadius.circular(7),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  child: Text(
-                                    "# $skill",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ))
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.withOpacity(0.4),
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 4),
+                                          child: Text(
+                                            "# $skill",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ))
                                   .toList(),
                             ),
                           ],
@@ -389,9 +491,6 @@ class _ProjectListPageState extends State<ProjectListPage> {
       },
     );
   }
-
-
-
 
   String orderBy(String order) {
     if (order == "시작일") {
@@ -431,10 +530,12 @@ class _ProjectListPageState extends State<ProjectListPage> {
 
   Widget buildProjectList() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height -
-          216, // 216 is the estimated height of the header and footer
+      height: MediaQuery.of(context).size.height - 180,
       child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('Projects').orderBy('중요도', descending: false).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('Projects')
+            .orderBy('중요도', descending: false)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -459,7 +560,9 @@ class _ProjectListPageState extends State<ProjectListPage> {
               final List<String> summary = (data['summary'] as List<dynamic>)
                   .map((skill) => skill as String)
                   .toList();
-
+              final List<String> category = (data['category'] as List<dynamic>)
+                  .map((skill) => skill as String)
+                  .toList();
               return Project(
                 name: data['projectName'] as String,
                 description: data['description'] as String,
@@ -470,84 +573,94 @@ class _ProjectListPageState extends State<ProjectListPage> {
                 skills: skills,
                 impression: data['느낀점'] as String,
                 importance: data['중요도'] as String,
-                category: data['category'] as String,
+                category: category,
                 summary: summary,
               );
             }).toList();
-          } else if(_selectedCategory == '대표 프로젝트'){
-            projects = snapshot.data!.docs.map((doc) {
-              final data = doc.data() as Map<String, dynamic>;
-              final List<String> imageUrls =
-              (data['imageUrls'] as List<dynamic>)
-                  .map((url) => url as String)
-                  .toList();
-              final List<String> skills = (data['주요기술'] as List<dynamic>)
-                  .map((url) => url as String)
-                  .toList();
-              final List<String> summary = (data['summary'] as List<dynamic>)
-                  .map((skill) => skill as String)
-                  .toList();
-              if (data['대표'] == true){
-                return Project(
-                  name: data['projectName'] as String,
-                  description: data['description'] as String,
-                  imageUrl: data['imageUrl'] as String,
-                  startDate: (data['startDate'] as Timestamp).toDate(),
-                  endDate: (data['endDate'] as Timestamp).toDate(),
-                  imageUrls: imageUrls,
-                  skills: skills,
-                  impression: data['느낀점'] as String,
-                  importance: data['중요도'] as String,
-                  category: data['category'] as String,
-                  summary:  summary,
-                );
-              }else {
-                return null;
-              }
-            }) .where((p) => p != null)
-                .toList()
-                .cast<
-                Project>(); // Add this line to cast the list to List<Projec
-          }
-          else {
-            // Filter projects by category
+          } else if (_selectedCategory == '대표 프로젝트') {
             projects = snapshot.data!.docs
                 .map((doc) {
-              final data = doc.data() as Map<String, dynamic>;
-              final List<String> imageUrls =
-              (data['imageUrls'] as List<dynamic>)
-                  .map((url) => url as String)
-                  .toList();
-              final List<String> skills = (data['주요기술'] as List<dynamic>)
-                  .map((url) => url as String)
-                  .toList();
-              final List<String> summary = (data['summary'] as List<dynamic>)
-                  .map((skill) => skill as String)
-                  .toList();
-              if (data['category'] == _selectedCategory) {
-                return Project(
-                  name: data['projectName'] as String,
-                  description: data['description'] as String,
-                  imageUrl: data['imageUrl'] as String,
-                  startDate: (data['startDate'] as Timestamp).toDate(),
-                  endDate: (data['endDate'] as Timestamp).toDate(),
-                  imageUrls: imageUrls,
-                  skills: skills,
-                  impression: data['느낀점'] as String,
-                  importance: data['중요도'] as String,
-                  category: data['category'] as String,
-                  summary: summary,
-                );
-              } else {
-                return null;
-              }
-            })
+                  final data = doc.data() as Map<String, dynamic>;
+                  final List<String> imageUrls =
+                      (data['imageUrls'] as List<dynamic>)
+                          .map((url) => url as String)
+                          .toList();
+                  final List<String> skills = (data['주요기술'] as List<dynamic>)
+                      .map((url) => url as String)
+                      .toList();
+                  final List<String> summary =
+                      (data['summary'] as List<dynamic>)
+                          .map((skill) => skill as String)
+                          .toList();
+                  final List<String> category =
+                  (data['category'] as List<dynamic>)
+                      .map((skill) => skill as String)
+                      .toList();
+                  if (data['대표'] == true) {
+                    return Project(
+                      name: data['projectName'] as String,
+                      description: data['description'] as String,
+                      imageUrl: data['imageUrl'] as String,
+                      startDate: (data['startDate'] as Timestamp).toDate(),
+                      endDate: (data['endDate'] as Timestamp).toDate(),
+                      imageUrls: imageUrls,
+                      skills: skills,
+                      impression: data['느낀점'] as String,
+                      importance: data['중요도'] as String,
+                      category: category,
+                      summary: summary,
+                    );
+                  } else {
+                    return null;
+                  }
+                })
                 .where((p) => p != null)
                 .toList()
-                .cast<
-                Project>(); // Add this line to cast the list to List<Project>
+                .cast<Project>();
+          } else {
+// Filter projects by category
+            projects = snapshot.data!.docs
+                .map((doc) {
+                  final data = doc.data() as Map<String, dynamic>;
+                  final List<String> imageUrls =
+                      (data['imageUrls'] as List<dynamic>)
+                          .map((url) => url as String)
+                          .toList();
+                  final List<String> skills = (data['주요기술'] as List<dynamic>)
+                      .map((url) => url as String)
+                      .toList();
+                  final List<String> summary =
+                      (data['summary'] as List<dynamic>)
+                          .map((skill) => skill as String)
+                          .toList();
+                  final List<String> category = (data['category'] as List<dynamic>)
+                      .map((url) => url as String)
+                      .toList();
+                  if (data['category'].contains(_selectedCategory)) {
+                    return Project(
+                      name: data['projectName'] as String,
+                      description: data['description'] as String,
+                      imageUrl: data['imageUrl'] as String,
+                      startDate: (data['startDate'] as Timestamp).toDate(),
+                      endDate: (data['endDate'] as Timestamp).toDate(),
+                      imageUrls: imageUrls,
+                      skills: skills,
+                      impression: data['느낀점'] as String,
+                      importance: data['중요도'] as String,
+                      category: category,
+                      summary: summary,
+                    );
+                  } else {
+                    return null;
+                  }
+                })
+                .where((p) => p != null)
+                .toList()
+                .cast<Project>();
           }
-            return buildListView(projects);
+          return _isLandScape
+              ? buildListView(projects)
+              : buildNarrowListView(projects);
         },
       ),
     );
@@ -635,36 +748,39 @@ class _ProjectListPageState extends State<ProjectListPage> {
     double paddingValue = 12;
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    paddingValue = getPaddingValue(screenWidth);
+    paddingValue = getPaddingValueOfDetailPage(screenWidth);
 
     return Scaffold(
       appBar: buildAppBar(),
       //drawer: buildDrawer(context),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-              left: paddingValue, right: paddingValue, top: 16.0,),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //buildProfileWidget(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    '카테고리',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: paddingValue,
+          right: paddingValue,
+          top: 16.0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //buildProfileWidget(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  '카테고리',
+                  style: TextStyle(
+                    fontSize: 15,
                   ),
-                  SizedBox(width: 10,),
-                  buildCategoryDropdown(),
-                ],
-              ),
-              SizedBox(height: 16),
-              buildProjectList(),
-            ],
-          ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                buildCategoryDropdown(),
+              ],
+            ),
+            SizedBox(height: 16),
+            buildProjectList(),
+          ],
         ),
       ),
     );

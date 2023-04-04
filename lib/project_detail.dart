@@ -152,9 +152,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
   }
 
   Widget buildSkills(Project project) {
-    if (project.category == "대외 활동") {
-      return Text("");
-    } else {
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -170,7 +168,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           ),
         ],
       );
-    }
+
   }
 
   Widget buildTitleText(Project project) {
@@ -219,6 +217,114 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     );
   }
 
+  Widget buildBulletParagraph(List<String> texts) {
+    final titles = [    "프로젝트 목표",    "사용한 기술",    "문제점 및 어려운점",    "해결 방안",    "결과",    "배우고 느낀점",  ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (int i = 0; i < titles.length; i++)
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${titles[i]}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    texts[i].trim(),
+                    style: TextStyle(fontSize: 20, height: 1.5),
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget buildOutsideBulletParagraph(List<String> texts) {
+    final titles = [
+      "주체기관",
+      "활동목표",
+      "활동내용",
+      "담당역할",
+      "활동성과",
+      "배우고 느낀점",
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (int i = 0; i < titles.length; i++)
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${titles[i]}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    texts[i].trim(),
+                    style: TextStyle(fontSize: 20, height: 1.5),
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget buildSummary(Project project){
+
+    if(project.category == "대외 활동"){
+      return buildOutsideBulletParagraph(project.summary);
+    }
+    else{
+      return buildBulletParagraph(project.summary);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,51 +339,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
 
 
 
-    Widget buildBulletParagraph(List<String> texts) {
-      final titles = [    "프로젝트 목표",    "사용한 기술",    "문제점 및 어려운점",    "해결 방안",    "결과",    "배우고 느낀점",  ];
 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (int i = 0; i < titles.length; i++)
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${titles[i]}",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      texts[i].trim(),
-                      style: TextStyle(fontSize: 20, height: 1.5),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -301,7 +363,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
               ),
               SizedBox(height: 10),
               Text(
-                project.category,
+                project.category[0],
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -350,7 +412,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
               ),
               SizedBox(height: 10),
               _isSummary
-                  ? buildBulletParagraph(project.summary)
+                  ? buildSummary(project)
                    : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
