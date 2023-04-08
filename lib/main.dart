@@ -7,6 +7,7 @@ import 'package:portfolio/project_list_page.dart';
 import 'package:portfolio/upload.dart';
 
 import 'firebase_options.dart';
+import 'introduction_page.dart';
 
 void main() async { // async 추가
 
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/projectDetail': (context) => ProjectDetailPage(),
         '/profileDetail': (context) => ProfileDetailPage(),
         '/upload': (context) => UploadPage(),
+        '/introductionDetail': (context) => IntroductionDetailPage(),
       },
     );
   }

@@ -24,6 +24,14 @@ class _ProjectListPageState extends State<ProjectListPage> {
   String _password = '';
   String _selectedCategory = '전체';
 
+  String getSortedValue(String sortedCriteria){
+    if(sortedCriteria == '최신순') {
+      return 'startDate';
+    } else{
+      return sortedCriteria;
+    }
+  }
+
   Widget buildProjectSummary(List<String> summary) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,9 +92,9 @@ class _ProjectListPageState extends State<ProjectListPage> {
         });
       },
       items:
-          <String>['중요도', '시작일'].map<DropdownMenuItem<String>>((String value) {
+          <String>['중요도', '최신순'].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
-          value: value,
+          value: getSortedValue(value),
           child: Text(value),
         );
       }).toList(),
@@ -101,7 +109,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
           _selectedCategory = value!;
         });
       },
-      items: <String>['전체', '대표 프로젝트', '자율주행', '임베디드', 'IoT', '딥러닝', 'SLAM', '기타']
+      items: <String>['전체', '대표 프로젝트', '자율주행', '임베디드', '딥러닝', 'SLAM']
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -534,7 +542,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('Projects')
-            .orderBy('중요도', descending: false)
+            .orderBy(_sortCriteria, descending: _sortCriteria == 'startDate' ? true : false)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
@@ -776,6 +784,19 @@ class _ProjectListPageState extends State<ProjectListPage> {
                   width: 10,
                 ),
                 buildCategoryDropdown(),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  '정렬',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                buildSortDropdown(),
               ],
             ),
             SizedBox(height: 16),

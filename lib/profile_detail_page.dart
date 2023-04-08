@@ -202,7 +202,26 @@ class ProfileDetailPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildSubtitle("자기소개"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: buildSubtitle("자기소개"),
+              ),
+              TextButton(
+                child: Text(
+                  '전체보기',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  )
+                ),
+                onPressed: (){
+                  Navigator.pushNamed(context, '/introductionDetail', arguments: data);
+                },
+              )
+            ],
+          ),
           const SizedBox(height: 8),
           Text(
             data['introduction'],
