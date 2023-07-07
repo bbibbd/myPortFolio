@@ -206,7 +206,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                 children: [
                   Text(
                     paragraph.trim(),
-                    style: TextStyle(fontSize: 20, height: 1.6),
+                    style: TextStyle(fontSize: 22, height: 1.8),
                   ),
                   SizedBox(height: 16),
                 ],
@@ -420,7 +420,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                         Text(
                           "프로젝트 내용",
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

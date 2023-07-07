@@ -47,7 +47,7 @@ class IntroductionDetailPage extends StatelessWidget {
                       Text(
                         '${index + 1}. $title',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -55,8 +55,8 @@ class IntroductionDetailPage extends StatelessWidget {
                       Text(
                         answer,
                         style: TextStyle(
-                          fontSize: 18,
-                          height: 1.5,
+                          fontSize: 20,
+                          height: 1.7,
                         ),
                       ),
                     ],

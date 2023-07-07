@@ -34,10 +34,10 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: {
-        '/': (context) => HomePage(),
+        //'/': (context) => HomePage(),
         '/projectList': (context) => ProjectListPage(),
         '/projectDetail': (context) => ProjectDetailPage(),
-        '/profileDetail': (context) => ProfileDetailPage(),
+        '/': (context) => ProfileDetailPage(),
         '/upload': (context) => UploadPage(),
         '/introductionDetail': (context) => IntroductionDetailPage(),
       },

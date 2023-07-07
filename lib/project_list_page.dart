@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'profiel_widget.dart';
 import 'project.dart';
 import 'package:intl/intl.dart';
@@ -16,11 +15,6 @@ class ProjectListPage extends StatefulWidget {
 class _ProjectListPageState extends State<ProjectListPage> {
   bool _isLandScape = false;
   String _sortCriteria = '중요도'; // 초기값으로 중요도를 기준으로 정렬
-  final Uri _github = Uri.parse('https://github.com/bbibbd');
-  final Uri _instagram = Uri.parse('https://www.instagram.com/key_0312/');
-  final Uri _tistory = Uri.parse('https://musit.tistory.com/');
-  final Uri _kakaotalk =
-      Uri.parse('qr.kakao.com/talk/sX6zLpJvLBbDoOHw9yNUzYMfLUk-');
   String _password = '';
   String _selectedCategory = '전체';
 
@@ -28,7 +22,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
     if(sortedCriteria == '최신순') {
       return 'startDate';
     } else{
-      return sortedCriteria;
+      return '중요도';
     }
   }
 
@@ -92,7 +86,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
         });
       },
       items:
-          <String>['중요도', '최신순'].map<DropdownMenuItem<String>>((String value) {
+          <String>['기본', '최신순'].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: getSortedValue(value),
           child: Text(value),
@@ -137,139 +131,7 @@ class _ProjectListPageState extends State<ProjectListPage> {
     }
   }
 
-  Future<void> _launchUrl(Uri url) async {
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $url');
-    }
-  }
 
-  Widget buildDrawer(BuildContext context) {
-    return Drawer(
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text('김기범', style: TextStyle(fontSize: 18.0)),
-              accountEmail: const Text('gibeom@handong.ac.kr'),
-              currentAccountPicture: const CircleAvatar(
-                radius: 60.0,
-                backgroundImage: NetworkImage(
-                  'https://firebasestorage.googleapis.com/v0/b/myportfolio-eeeb5.appspot.com/o/profile%2FIMG_3101.JPG?alt=media&token=9585553e-2221-49d0-8648-1c265a5f3472',
-                ), // default image URL
-              ),
-              margin: EdgeInsets.zero,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-            // ListTile(
-            //   title: Text('GitHub', style: TextStyle(fontSize: 16.0)),
-            //   leading: Icon(Icons.code),
-            //   onTap: () {
-            //     _launchUrl(_github);
-            //   },
-            // ),
-            // ListTile(
-            //   title: Text('Instagram', style: TextStyle(fontSize: 16.0)),
-            //   leading: Icon(Icons.chat),
-            //   onTap: () {
-            //     _launchUrl(_instagram);
-            //   },
-            // ),
-            // ListTile(
-            //   title: Text('Tistory', style: TextStyle(fontSize: 16.0)),
-            //   leading: Icon(Icons.chat),
-            //   onTap: () {
-            //     _launchUrl(_tistory);
-            //   },
-            // ),
-            // ListTile(
-            //   title: Text('Kakao', style: TextStyle(fontSize: 16.0)),
-            //   leading: Icon(Icons.chat),
-            //   onTap: () {
-            //     _launchUrl(_kakaotalk);
-            //   },
-            // ),
-            // ListTile(
-            //   title: Text('글쓰기', style: TextStyle(fontSize: 16.0)),
-            //   leading: Icon(Icons.edit),
-            //   onTap: () {
-            //     showDialog(
-            //       context: context,
-            //       builder: (BuildContext context) {
-            //         return AlertDialog(
-            //           title: Text('암호 입력'),
-            //           content: TextFormField(
-            //             obscureText: true,
-            //             decoration: InputDecoration(
-            //               hintText: '암호를 입력하세요.',
-            //             ),
-            //             onChanged: (value) {
-            //               _password = value;
-            //             },
-            //           ),
-            //           actions: <Widget>[
-            //             TextButton(
-            //               child: Text('취소'),
-            //               onPressed: () {
-            //                 Navigator.of(context).pop();
-            //               },
-            //             ),
-            //             TextButton(
-            //               child: Text('확인'),
-            //               onPressed: () {
-            //                 if (_password == 'dslove1109') {
-            //                   // 암호가 맞는 경우
-            //                   Navigator.pushNamed(context, '/upload');
-            //                 } else {
-            //                   // 암호가 틀린 경우
-            //                   showDialog(
-            //                     context: context,
-            //                     builder: (BuildContext context) {
-            //                       return AlertDialog(
-            //                         title: Text('암호가 틀렸습니다.'),
-            //                         actions: <Widget>[
-            //                           TextButton(
-            //                             child: Text('확인'),
-            //                             onPressed: () {
-            //                               Navigator.of(context).pop();
-            //                             },
-            //                           ),
-            //                         ],
-            //                       );
-            //                     },
-            //                   );
-            //                 }
-            //               },
-            //             ),
-            //           ],
-            //         );
-            //       },
-            //     );
-            //   },
-            // ),
-            // Divider(),
-            SizedBox(
-              height: 10,
-            ),
-            ListTile(
-              title: Text('Contact', style: TextStyle(fontSize: 16.0)),
-              leading: Icon(Icons.contact_mail),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Designed by Gibeom Kim'),
-                  Text('Address: 장량로114번길 23-8'),
-                  Text('Phone: +82 10-6501-6514'),
-                  Text('Email: gibeom@handong.ac.kr'),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget buildDate(Project project) {
     return Row(
@@ -324,16 +186,31 @@ class _ProjectListPageState extends State<ProjectListPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       height: isWideScreen ? 350 : 180,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(project.imageUrl),
-                          fit: BoxFit.cover,
-                        ),
+                      child: Image.network(
+                        project.imageUrl,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else if (loadingProgress.expectedTotalBytes != null) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!,
+                              ),
+                            );
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
                       ),
+
                     ),
+
                     Padding(
                       padding: const EdgeInsets.all(
                         16,
